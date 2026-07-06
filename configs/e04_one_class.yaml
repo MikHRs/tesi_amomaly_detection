@@ -1,0 +1,58 @@
+experiment:
+  id: "E04"
+  name: "one_class_patch_feature_baseline"
+  task: "anomaly_detection_and_localization"
+  status: "historical_pilot_prepared_not_executed"
+
+data:
+  dataset: "data/processed/anomaly_pilot_v3"
+  sample_fps: 2.0
+  transition_margin_seconds: 2.0
+  train:
+    split: "train"
+    label: "normal"
+    images: 169
+  validation:
+    split: "validation"
+    label: "normal"
+    images: 42
+  test:
+    split: "test"
+    label: "anomaly"
+    images: 895
+
+method:
+  family: "nearest_neighbor_patch_features"
+  description: "baseline one-class ispirata a PatchCore"
+  backbone: "ResNet18 ImageNet pre-trained"
+  backbone_frozen: true
+  training_uses_anomaly_labels: false
+  image_size_height: 224
+  image_size_width: 280
+  feature_layer: "layer3"
+  maximum_memory_patches: 30000
+  random_seed: 42
+
+scoring:
+  patch_score: "distance to nearest normal patch"
+  frame_score: "99th percentile of patch scores"
+  threshold: "95th percentile on normal validation frames"
+
+evaluation:
+  frame_metrics:
+    - "AUROC"
+    - "average_precision"
+    - "precision"
+    - "recall"
+    - "F1"
+  localization:
+    - "anomaly_heatmap"
+    - "pointing_game_against_CVAT_boxes"
+
+notes:
+  - "Protocollo superato: non usare come valutazione finale."
+  - "Validation normale riutilizzata nelle metriche del notebook: serve un test normale indipendente."
+  - "La nuova pipeline usa il terzo video come sorgente normale separata."
+  - "Grounding DINO non viene usato per decidere l'anomalia."
+  - "SAM2 potrà essere aggiunto dopo, solo per rifinire o seguire una regione anomala."
+  - "Le box CVAT sono usate esclusivamente nella valutazione."

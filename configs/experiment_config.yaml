@@ -1,0 +1,37 @@
+project:
+  name: "tesi_anomaly_localization_thermal"
+  main_label: "anomalia"
+  case_study: "video_termici_ferroviari"
+
+data:
+  raw_dir: "data/raw"
+  frames_dir: "data/frames"
+  cvat_exports_dir: "data/exports_cvat"
+  normal_reference_dir: "data/normal_train_frames"
+  anomaly_test_dir: "data/test_anomaly_frames"
+
+annotation:
+  main_label: "anomalia"
+  attributes:
+    tipo:
+      - "persona"
+      - "pallet"
+      - "scatola"
+      - "legno"
+      - "oggetto_generico"
+      - "altro"
+      - "incerto"
+    visibilita:
+      - "chiaro"
+      - "parziale"
+      - "difficile"
+    posizione:
+      - "sui_binari"
+      - "vicino_binari"
+      - "fuori_roi"
+
+evaluation:
+  iou_thresholds:
+    - 0.3
+    - 0.5
+  main_iou_threshold: 0.5

@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Relazione di avanzamento — Localizzazione di anomalie in immagini termiche</title>
+  <style>
+    @page { size: A4; margin: 16mm 16mm 17mm 16mm; }
+    :root {
+      --ink: #172033;
+      --muted: #526173;
+      --blue: #0d5f7d;
+      --cyan: #138aa3;
+      --green: #267d5b;
+      --orange: #c87313;
+      --red: #a73c3c;
+      --soft: #edf4f7;
+      --soft-green: #edf7f2;
+      --soft-orange: #fff5e5;
+      --line: #cbd6dd;
+    }
+    * { box-sizing: border-box; }
+    html { font-size: 10pt; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "DejaVu Sans", Arial, sans-serif;
+      line-height: 1.43;
+    }
+    h1, h2, h3, h4 {
+      color: #123f54;
+      line-height: 1.16;
+      page-break-after: avoid;
+    }
+    h1 { font-size: 24pt; margin: 0 0 7mm; }
+    h2 {
+      font-size: 16.5pt;
+      margin: 8mm 0 4mm;
+      padding-bottom: 1.5mm;
+      border-bottom: 1.5px solid var(--cyan);
+    }
+    h3 { font-size: 12.5pt; margin: 5mm 0 2mm; }
+    h4 { font-size: 10.5pt; margin: 4mm 0 1.5mm; }
+    p { margin: 2mm 0; text-align: justify; }
+    ul, ol { margin: 2mm 0 3mm 5mm; padding-left: 5mm; }
+    li { margin: 1mm 0; }
+    code, .mono {
+      font-family: "DejaVu Sans Mono", monospace;
+      font-size: 8.2pt;
+      overflow-wrap: anywhere;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3mm 0 5mm;
+      font-size: 8.7pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 1.55mm 1.7mm;
+      vertical-align: top;
+    }
+    th {
+      color: #123f54;
+      background: #e8f0f4;
+      text-align: left;
+    }
+    tr:nth-child(even) td { background: #fafcfd; }
+    .center { text-align: center; }
+    .right { text-align: right; }
+    .small { font-size: 8.4pt; color: var(--muted); }
+    .tiny { font-size: 7.6pt; color: var(--muted); }
+    .nowrap { white-space: nowrap; }
+    .page { page-break-before: always; }
+    .avoid { page-break-inside: avoid; }
+    .cover {
+      height: 263mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 6mm 3mm 4mm;
+    }
+    .cover .eyebrow {
+      color: var(--cyan);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-size: 9.5pt;
+    }
+    .cover h1 {
+      font-size: 29pt;
+      max-width: 165mm;
+      margin-top: 20mm;
+    }
+    .cover .subtitle {
+      color: var(--muted);
+      font-size: 14pt;
+      max-width: 158mm;
+    }
+    .cover .meta {
+      border-top: 2px solid var(--cyan);
+      padding-top: 5mm;
+      display: grid;
+      grid-template-columns: 43mm auto;
+      gap: 2mm 5mm;
+    }
+    .summary {
+      border: 1px solid #9fb9c5;
+      border-left: 5px solid var(--cyan);
+      background: var(--soft);
+      padding: 4mm;
+      margin: 4mm 0;
+      page-break-inside: avoid;
+    }
+    .success {
+      border-left-color: var(--green);
+      background: var(--soft-green);
+    }
+    .warning {
+      border-left-color: var(--orange);
+      background: var(--soft-orange);
+    }
+    .critical {
+      border-left-color: var(--red);
+      background: #fbeeee;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2mm;
+      margin: 4mm 0;
+      page-break-inside: avoid;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      background: #fbfdfe;
+      padding: 3mm;
+      text-align: center;
+      border-radius: 2mm;
+    }
+    .metric strong {
+      display: block;
+      color: var(--blue);
+      font-size: 15pt;
+      margin-bottom: 1mm;
+    }
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 1.5mm;
+      margin: 4mm 0;
+      page-break-inside: avoid;
+    }
+    .pipeline .box {
+      border: 1px solid #9fb9c5;
+      background: var(--soft);
+      border-radius: 2mm;
+      padding: 3mm 2mm;
+      text-align: center;
+      font-size: 8.6pt;
+    }
+    .pipeline .arrow {
+      color: var(--cyan);
+      align-self: center;
+      font-size: 15pt;
+      font-weight: bold;
+    }
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm;
+      align-items: start;
+      page-break-inside: avoid;
+    }
+    figure {
+      margin: 4mm 0 5mm;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+    figure img {
+      max-width: 100%;
+      max-height: 181mm;
+      object-fit: contain;
+      border: 1px solid #cad5dc;
+    }
+    .grid2 figure img { max-height: 112mm; }
+    figcaption {
+      text-align: left;
+      margin-top: 1.5mm;
+      font-size: 8pt;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.5mm 2mm;
+      border-radius: 4mm;
+      background: #daf0e7;
+      color: #1f634c;
+      font-size: 8pt;
+      font-weight: 700;
+    }
+    .tag.gray { background: #e8edf1; color: #526173; }
+    .tag.orange { background: #ffedc9; color: #865900; }
+    .toc {
+      columns: 2;
+      column-gap: 12mm;
+      page-break-after: always;
+    }
+    .toc p { margin: 1.5mm 0; text-align: left; }
+    .toc .main { font-weight: 700; color: var(--blue); }
+    .toc .sub { padding-left: 4mm; color: var(--muted); }
+    .footer {
+      border-top: 1px solid var(--line);
+      margin-top: 8mm;
+      padding-top: 2mm;
+      font-size: 7.8pt;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="eyebrow">Tesi triennale · Ingegneria Informatica</div>
+    <h1>Localizzazione di anomalie in immagini termiche mediante foundation model visuali</h1>
+    <div class="subtitle">
+      Relazione completa di avanzamento per il ricevimento con il relatore:
+      dati, annotazioni, pipeline, esperimenti E01–E09, risultati, limiti e
+      decisioni richieste
+    </div>
+  </div>
+  <div class="meta">
+    <strong>Studente</strong><span>Michele Rais</span>
+    <strong>Documento</strong><span>Relazione di avanzamento tecnico-scientifico</span>
+    <strong>Preparato il</strong><span>6 luglio 2026</span>
+    <strong>Ricevimento</strong><span>7 luglio 2026</span>
+    <strong>Repository</strong><span class="mono">tesi_anomaly_detection</span>
+    <strong>Stato</strong><span>Campagna sperimentale principale completata</span>
+  </div>
+</section>
+
+<section>
+  <h1>Come leggere questo documento</h1>
+  <div class="summary success">
+    <strong>Messaggio principale.</strong>
+    Il lavoro non consiste in una sola prova con SAM. È stata costruita e
+    verificata una pipeline completa: inventario e controllo dei video,
+    revisione CVAT, segmentazione e tracking prompt-based, anomaly detection
+    reference-based e zero-shot, benchmark esterno, analisi temporale,
+    raffinamento automatico con SAM2 e studio sistematico degli errori.
+  </div>
+  <p>
+    Le sigle E01–E09 sono <strong>identificativi</strong>, non il conteggio di
+    nove esperimenti equivalenti. Sono stati eseguiti e archiviati
+    <strong>otto esperimenti</strong>: E01, E02, E03, E05, E06, E07, E08 ed
+    E09. E04 è un protocollo storico preparato ma non eseguito come risultato
+    finale, perché mescolava ruoli dei dati meno rigorosi rispetto allo split
+    adottato successivamente. E01 ed E02 comprendono inoltre una prima
+    versione storica e una versione v2 rivalutata dopo la revisione della
+    ground truth.
+  </p>
+  <div class="metric-grid">
+    <div class="metric"><strong>8</strong>esperimenti eseguiti</div>
+    <div class="metric"><strong>3</strong>famiglie di modelli</div>
+    <div class="metric"><strong>2</strong>domini di valutazione</div>
+    <div class="metric"><strong>16</strong>test software superati</div>
+  </div>
+  <h2>Indice operativo</h2>
+  <div class="toc">
+    <p class="main">1. Sintesi per il relatore</p>
+    <p class="sub">Contributi, risultati e decisioni richieste</p>
+    <p class="main">2. Problema e domande di ricerca</p>
+    <p class="main">3. Lavoro sui dati e sulla ground truth</p>
+    <p class="main">4. Pipeline e protocollo di valutazione</p>
+    <p class="main">5. Mappa completa E01–E09</p>
+    <p class="main">6. E01–E03: prompt, tracking e detector testuale</p>
+    <p class="main">7. E05–E06: anomaly detection ferroviaria</p>
+    <p class="main">8. E07–E08: benchmark termico esterno</p>
+    <p class="main">9. E09: raffinamento automatico con SAM2</p>
+    <p class="main">10. Conclusioni scientifiche</p>
+    <p class="main">11. Limiti, scelte e domande al relatore</p>
+    <p class="main">12. Piano di chiusura della tesi</p>
+    <p class="main">Appendice: riproducibilità e artefatti</p>
+  </div>
+</section>
+
+<section>
+  <h1>1. Sintesi per il relatore</h1>
+  <p>
+    La tesi studia se foundation model visuali, sviluppati prevalentemente su
+    immagini RGB, possano supportare la localizzazione di anomalie in immagini
+    e video termici. Il caso di studio principale è ferroviario; un benchmark
+    termico portuale esterno viene usato per controllare la generalizzazione.
+  </p>
+  <h2>Contributi già realizzati</h2>
+  <ol>
+    <li>
+      <strong>Dataset e ground truth:</strong> inventario dei video,
+      estrazione di clip e frame, conversione degli export CVAT, revisione
+      della ground truth San Donato e conservazione separata delle versioni.
+    </li>
+    <li>
+      <strong>Segmentazione e tracking:</strong> SAM2 con box manuale e
+      Grounding DINO + SAM2 con rilevamento periodico di nuove identità.
+    </li>
+    <li>
+      <strong>Anomaly detection:</strong> AnomalyDINO reference-based e
+      AnomalyVFM zero-shot, entrambi valutati a livello di frame e di
+      localizzazione.
+    </li>
+    <li>
+      <strong>Controllo esterno:</strong> 3.509 frame di 29 clip termici con
+      normali e anomalie nella stessa scena, per ridurre il confondente del
+      cambio di video.
+    </li>
+    <li>
+      <strong>Pipeline automatica finale:</strong> massimo della anomaly map
+      AnomalyDINO → punto automatico → SAM2 → confronto con CVAT.
+    </li>
+    <li>
+      <strong>Riproducibilità:</strong> commit, hash dei checkpoint, manifest,
+      notebook eseguiti, CSV per frame, mappe grezze e pacchetti finali.
+    </li>
+  </ol>
+  <h2>Risultati da ricordare</h2>
+  <table>
+    <thead>
+      <tr><th>Esperimento</th><th>Risultato principale</th><th>Lettura corretta</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>E01-v2</strong></td>
+        <td>IoU media 0,755; F1@0,5 = 1,000</td>
+        <td>Tracking condizionato da box manuale accurata.</td>
+      </tr>
+      <tr>
+        <td><strong>E02-v2</strong></td>
+        <td>IoU media 0,707; F1@0,5 = 0,946</td>
+        <td>Grounding DINO propone persone; SAM2 segmenta e segue.</td>
+      </tr>
+      <tr>
+        <td><strong>E05</strong></td>
+        <td>F1 frame 0,996; pointing game 0,956</td>
+        <td>Promettente, ma normali e anomalie provengono da scene diverse.</td>
+      </tr>
+      <tr>
+        <td><strong>E06</strong></td>
+        <td>F1 frame 1,000; pointing game persona 0,014</td>
+        <td>Classificazione perfetta non equivale a localizzazione corretta.</td>
+      </tr>
+      <tr>
+        <td><strong>E07</strong></td>
+        <td>AUROC 0,462; F1 calibrato 0,164</td>
+        <td>AnomalyVFM non generalizza al benchmark semantico esterno.</td>
+      </tr>
+      <tr>
+        <td><strong>E08</strong></td>
+        <td>AUROC 0,593 (16-shot); miglior F1 0,224 (200-shot)</td>
+        <td>AnomalyDINO supera E07, ma recall e separazione restano modesti.</td>
+      </tr>
+      <tr>
+        <td><strong>E09</strong></td>
+        <td>IoU media 0,501 → 0,717; hit@0,5 0,534 → 0,934</td>
+        <td>SAM2 rifinisce bene un candidato valido, ma non corregge un prompt errato.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="summary warning">
+    <strong>Conclusione prudente.</strong>
+    I foundation model sono utili nel dominio termico, ma i moduli hanno ruoli
+    diversi: AnomalyDINO/AnomalyVFM assegnano score e mappe; Grounding DINO
+    propone categorie; SAM2 rifinisce o propaga un candidato. Nessuno di questi
+    risultati, isolatamente, costituisce una soluzione operativa completa.
+  </div>
+</section>
+
+<section class="page">
+  <h1>2. Problema e domande di ricerca</h1>
+  <h2>Definizione del compito</h2>
+  <p>
+    La label principale rimane <strong>anomalia</strong>. Persona, scatola,
+    pallet o altro oggetto sono attributi descrittivi, non classi finali del
+    task. Riconoscere una persona non significa automaticamente stabilire che
+    sia anomala: l'anomalia dipende da scena, posizione e comportamento.
+  </p>
+  <div class="pipeline">
+    <div class="box"><strong>Video termici</strong><br>normali e test</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Anomaly model</strong><br>score + heatmap</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Candidato</strong><br>punto o box</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>SAM2 + CVAT</strong><br>rifinitura e verifica</div>
+  </div>
+  <h2>Domande di ricerca affrontate</h2>
+  <ol>
+    <li>
+      Un modello reference-based come AnomalyDINO riesce a distinguere la
+      normalità nel dominio termico con pochi riferimenti?
+    </li>
+    <li>
+      Un modello zero-shot come AnomalyVFM generalizza senza riferimenti
+      normali del dominio?
+    </li>
+    <li>
+      Quanto i risultati apparentemente perfetti dipendono dal cambio di
+      scena fra video normale e anomalo?
+    </li>
+    <li>
+      SAM2 può migliorare la localizzazione quando riceve un candidato
+      prodotto automaticamente?
+    </li>
+    <li>
+      Quali errori restano quando il punto, la box o lo score a monte sono
+      sbagliati?
+    </li>
+  </ol>
+  <h2>Distinzioni metodologiche</h2>
+  <table>
+    <thead><tr><th>Modulo</th><th>Input</th><th>Output</th><th>Che cosa non fa</th></tr></thead>
+    <tbody>
+      <tr><td>AnomalyDINO</td><td>Riferimenti normali + test</td><td>Score e mappa</td><td>Non è zero-shot puro.</td></tr>
+      <tr><td>AnomalyVFM</td><td>Solo test + pesi pre-addestrati</td><td>Score e mappa</td><td>Non apprende la normalità specifica della scena.</td></tr>
+      <tr><td>Grounding DINO</td><td>Prompt testuale</td><td>Box di categorie</td><td>Non decide se la categoria è anomala.</td></tr>
+      <tr><td>SAM2</td><td>Punto, box o maschera</td><td>Maschera/track</td><td>Non assegna autonomamente l'anomaly score.</td></tr>
+      <tr><td>CVAT</td><td>Annotazione umana</td><td>Ground truth</td><td>Non è un modello automatico.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="page">
+  <h1>3. Lavoro sui dati e sulla ground truth</h1>
+  <h2>Video e organizzazione</h2>
+  <p>
+    Sono stati verificati tre video ferroviari termici. Il video
+    <span class="mono">ir_2025-01-31_04-15-15.mp4</span> è stato controllato
+    come sorgente normale per AnomalyDINO; i video
+    <span class="mono">ir_2025-01-31_05-09-12.mp4</span> e
+    <span class="mono">test_video_san_donato.mp4</span> contengono eventi
+    annotati. Per i pilot principali è stata congelata la clip San Donato
+    85–105 s, 500 frame a 640×512.
+  </p>
+  <h2>Revisione CVAT</h2>
+  <ul>
+    <li>export CVAT for video 1.1 archiviato e verificato;</li>
+    <li>6.575 frame, risoluzione 640×512;</li>
+    <li>20 track e 59.650 box interpolate;</li>
+    <li>nessuna coordinata invalida o fuori immagine;</li>
+    <li>14 track con attributo <span class="mono">persona</span> e 6
+      <span class="mono">incerto</span>;</li>
+    <li>versione v1 conservata; versione v2 revisionata usata come ground truth
+      canonica.</li>
+  </ul>
+  <div class="summary">
+    <strong>Perché è importante.</strong>
+    La revisione della ground truth ha cambiato sostanzialmente la valutazione
+    E01: l'IoU media è passata da 0,587 a 0,755. Questo è un risultato
+    metodologico: una metrica affidabile richiede annotazioni affidabili.
+  </div>
+  <h2>Benchmark termico esterno</h2>
+  <p>
+    Il <em>Thermal Anomaly Detection Dataset</em> è stato aggiunto come
+    controllo esterno: 300 clip normali di training, 29 clip test, 3.509 frame
+    test (2.385 normali, 1.124 anomali). Le annotazioni sono temporali e
+    binarie; non sono disponibili box o maschere spaziali.
+  </p>
+  <div class="grid2">
+    <figure>
+      <img src="../results/anomaly_vfm/E07_v1_anomalyvfm_external_zero_shot/export/E07_dataset_examples.png">
+      <figcaption>
+        Esempi normali e anomali del benchmark esterno. La scena è la stessa
+        all'interno del clip, riducendo il confondente del cambio di video.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../results/anomaly_vfm/E07_v1_anomalyvfm_external_zero_shot/export/E07_ground_truth_timeline.png">
+      <figcaption>
+        Ground truth temporale dei 29 clip: verde normale, rosso anomalo.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="page">
+  <h1>4. Pipeline e protocollo di valutazione</h1>
+  <h2>Livelli di valutazione</h2>
+  <table>
+    <thead><tr><th>Livello</th><th>Metriche</th><th>Interpretazione</th></tr></thead>
+    <tbody>
+      <tr><td>Frame</td><td>TN, FP, FN, TP, precision, recall, F1, AUROC, AP</td><td>Il frame contiene un'anomalia?</td></tr>
+      <tr><td>Spazio</td><td>Pointing game, IoU box, hit rate, matching uno-a-uno</td><td>La regione indicata coincide con l'anomalia?</td></tr>
+      <tr><td>Tempo</td><td>Segmenti, tIoU, precision/recall/F1 degli eventi</td><td>L'intervallo temporale è localizzato?</td></tr>
+      <tr><td>Qualitativo</td><td>TP, FP, FN, overlay e casi limite</td><td>Perché il metodo riesce o fallisce?</td></tr>
+    </tbody>
+  </table>
+  <h2>Regole anti-leakage</h2>
+  <ul>
+    <li>le soglie vengono calibrate soltanto su frame normali separati;</li>
+    <li>i frame test anomali non determinano la soglia;</li>
+    <li>in E08, 200 clip di riferimento, 100 di calibrazione e 29 di test sono disgiunti;</li>
+    <li>le configurazioni 16/64/200-shot sono memorie annidate della stessa permutazione;</li>
+    <li>le metriche di segmentazione pixel-level non vengono riportate senza maschere GT.</li>
+  </ul>
+  <h2>Riproducibilità</h2>
+  <p>
+    Ogni esperimento conserva configurazione, commit, hash dei checkpoint,
+    manifest degli input, CSV per frame, mappe o maschere compresse, figure,
+    notebook eseguito e pacchetto ZIP verificato. Gli output numerici sono
+    stati ricalcolati localmente e confrontati con i riepiloghi prodotti su
+    Colab/Kaggle. La repository include 16 test automatici, tutti superati.
+  </p>
+  <div class="summary warning">
+    <strong>Scelta scientifica.</strong>
+    Il fine-tuning non è stato inserito nel nucleo sperimentale: l'obiettivo
+    è confrontare comportamento zero-shot, reference-based e prompt-based con
+    pochi dati. La calibrazione su normali e il numero di riferimenti sono
+    trattati come adattamento leggero, dichiarato e separato dal test.
+  </div>
+</section>
+
+<section class="page">
+  <h1>5. Mappa completa delle attività E01–E09</h1>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Attività</th><th>Stato</th><th>Output principale</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>E01</td><td>SAM2 con box manuale, tracking video</td><td><span class="tag">v2 completato</span></td><td>Maschere, video, IoU per frame</td></tr>
+      <tr><td>E02</td><td>Grounding DINO periodico + SAM2</td><td><span class="tag">v2 completato</span></td><td>3 identità, detection periodiche, tracking</td></tr>
+      <tr><td>E03</td><td>Sensibilità ai prompt Grounding DINO</td><td><span class="tag">completato</span></td><td>Confronto di 6 prompt testuali</td></tr>
+      <tr><td>E04</td><td>Baseline one-class storica</td><td><span class="tag orange">preparato, non eseguito</span></td><td>Protocollo superato da E05–E08</td></tr>
+      <tr><td>E05</td><td>AnomalyDINO 16-shot ferroviario</td><td><span class="tag">completato</span></td><td>Score, mappe, pointing, box</td></tr>
+      <tr><td>E06</td><td>AnomalyVFM zero-shot ferroviario</td><td><span class="tag">completato</span></td><td>Score e mappe senza riferimenti normali</td></tr>
+      <tr><td>E07</td><td>AnomalyVFM su benchmark esterno</td><td><span class="tag">completato</span></td><td>Frame, clip ed eventi temporali</td></tr>
+      <tr><td>E08</td><td>AnomalyDINO 16/64/200-shot esterno</td><td><span class="tag">completato</span></td><td>Effetto del numero di riferimenti</td></tr>
+      <tr><td>E09</td><td>Punto AnomalyDINO → SAM2</td><td><span class="tag">completato</span></td><td>Raffinamento automatico e controllo FP</td></tr>
+    </tbody>
+  </table>
+  <h2>Attività trasversali non numerate</h2>
+  <ul>
+    <li>lettura critica di paper, survey, dataset e repository indicati dal relatore;</li>
+    <li>creazione della repository, script CLI, test e documentazione;</li>
+    <li>inventario tecnico dei video e controlli di leggibilità;</li>
+    <li>conversione, controllo e revisione degli export CVAT;</li>
+    <li>costruzione di pacchetti di input riproducibili per Colab/Kaggle;</li>
+    <li>gestione delle incompatibilità Python/NumPy/Hugging Face;</li>
+    <li>congelamento di commit e checksum dei modelli;</li>
+    <li>analisi degli errori e produzione di figure per tesi e discussione.</li>
+  </ul>
+  <div class="summary">
+    <strong>Quindi non sono “solo nove prove”.</strong>
+    La numerazione descrive una sequenza di protocolli. Il contributo include
+    anche qualità dei dati, riproducibilità, confronto fra obiettivi diversi
+    e verifica critica dei risultati apparentemente migliori.
+  </div>
+</section>
+
+<section class="page">
+  <h1>6. E01–E03: prompt, tracking e detector testuale</h1>
+  <h2>E01-v2 — SAM2 da box manuale</h2>
+  <p>
+    SAM 2.1 Small riceve una box al primo frame della clip e propaga la
+    maschera per 500 frame. La valutazione usa la track CVAT v2 della persona
+    selezionata e 490 frame comuni.
+  </p>
+  <table>
+    <thead><tr><th>Frame comuni</th><th>IoU media</th><th>IoU mediana</th><th>IoU minima</th><th>F1@0,5</th></tr></thead>
+    <tbody><tr><td>490</td><td>0,755</td><td>0,769</td><td>0,561</td><td>1,000</td></tr></tbody>
+  </table>
+  <figure>
+    <img src="../results/qualitative/sam2_pilot_01_v2/six_frames.png">
+    <figcaption>
+      E01-v2. SAM2 mantiene l'identità e segue i cambiamenti di postura.
+      Risultato di tracking condizionato, non anomaly detection autonoma.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="page">
+  <h2>E02-v2 — Grounding DINO periodico + SAM2</h2>
+  <p>
+    Il prompt <span class="mono">person</span> genera le box iniziali.
+    Grounding DINO viene rieseguito ogni 50 frame, consentendo di aggiungere
+    una terza persona che entra al frame clip 250. Le associazioni verificate
+    sono ID 1 → track 10, ID 2 → track 0, ID 3 → track 12.
+  </p>
+  <table>
+    <thead><tr><th>ID</th><th>Frame comuni</th><th>IoU media</th><th>F1@0,3</th><th>F1@0,5</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>500</td><td>0,675</td><td>1,000</td><td>0,888</td></tr>
+      <tr><td>2</td><td>490</td><td>0,751</td><td>1,000</td><td>1,000</td></tr>
+      <tr><td>3</td><td>242</td><td>0,684</td><td>1,000</td><td>0,959</td></tr>
+      <tr><td><strong>Totale</strong></td><td><strong>1.232</strong></td><td><strong>0,707</strong></td><td><strong>1,000</strong></td><td><strong>0,946</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="grid2">
+    <figure>
+      <img src="../results/qualitative/grounded_sam2_pilot_02_v2/colab_export/periodic_sam2_six_frames.png">
+      <figcaption>Tre identità seguite da SAM2 dopo le proposte periodiche.</figcaption>
+    </figure>
+    <figure>
+      <img src="../results/qualitative/grounded_sam2_pilot_02_v2/colab_export/periodic_new_candidates.png">
+      <figcaption>
+        In giallo i nuovi candidati. Una proposta duplicata viene scartata:
+        il numero di box grezze non è il numero di persone.
+      </figcaption>
+    </figure>
+  </div>
+  <h2>E03 — Sensibilità al prompt</h2>
+  <p>
+    Sullo stesso frame sono confrontati <span class="mono">person</span>,
+    <span class="mono">box</span>, <span class="mono">pallet</span>,
+    <span class="mono">obstacle</span>, <span class="mono">foreign object</span>
+    e <span class="mono">anomaly</span>. Prompt generici aumentano i candidati,
+    ma non definiscono semanticamente l'anomalia.
+  </p>
+  <figure>
+    <img src="../results/qualitative/grounding_dino_prompt_sensitivity_e03/prompt_comparison.png">
+    <figcaption>
+      E03. Grounding DINO è utile per proporre regioni, ma resta un modulo
+      ausiliario di object detection open-vocabulary.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="page">
+  <h1>7. E05–E06: anomaly detection ferroviaria</h1>
+  <h2>E05 — AnomalyDINO 16-shot</h2>
+  <p>
+    La memoria normale usa 16 riferimenti termici; 20 normali separati
+    calibrano la soglia e altri 20 misurano i falsi positivi. Il test anomalo
+    contiene 500 frame San Donato.
+  </p>
+  <table>
+    <thead><tr><th>TN</th><th>FP</th><th>FN</th><th>TP</th><th>F1 frame</th><th>AUROC</th><th>Pointing persona</th></tr></thead>
+    <tbody><tr><td>16</td><td>4</td><td>0</td><td>500</td><td>0,996</td><td>1,000</td><td>0,956</td></tr></tbody>
+  </table>
+  <p>
+    La box ricavata dal top 1% adattivo raggiunge F1 `0,365` a IoU 0,3 e
+    `0,143` a IoU 0,5. La soglia spaziale assoluta fallisce perché il cambio
+    globale di scena aumenta anche lo sfondo della heatmap.
+  </p>
+  <div class="grid2">
+    <figure>
+      <img src="../results/anomaly_dino/E05_v1_anomalydino_16shot/export/score_distribution.png">
+      <figcaption>Separazione degli score E05 e soglia calibrata sui normali.</figcaption>
+    </figure>
+    <figure>
+      <img src="../results/anomaly_dino/E05_v1_anomalydino_16shot/export/qualitative_six_frames.png">
+      <figcaption>Mappe E05: i massimi cadono spesso sulle persone.</figcaption>
+    </figure>
+  </div>
+  <div class="summary warning">
+    <strong>Limite essenziale.</strong>
+    Normali e anomalie provengono da video e scene differenti. AUROC 1,000
+    non può essere attribuita esclusivamente agli oggetti anomali.
+  </div>
+</section>
+
+<section class="page">
+  <h2>E06 — AnomalyVFM zero-shot</h2>
+  <p>
+    AnomalyVFM usa un checkpoint pre-addestrato senza riferimenti normali,
+    calibrazione o fine-tuning sui video ferroviari. Sullo stesso test di E05
+    separa perfettamente i frame, ma non localizza le persone.
+  </p>
+  <table>
+    <thead><tr><th>F1 frame</th><th>AUROC</th><th>Maschere native non vuote</th><th>Pointing persona</th><th>F1 box top 1%@0,3</th></tr></thead>
+    <tbody><tr><td>1,000</td><td>1,000</td><td>0/500</td><td>0,014</td><td>0,201</td></tr></tbody>
+  </table>
+  <div class="grid2">
+    <figure>
+      <img src="../results/anomaly_vfm/E06_v1_anomalyvfm_dinov2_zero_shot/export/E06_score_distribution.png">
+      <figcaption>Separazione perfetta degli score tra i due video.</figcaption>
+    </figure>
+    <figure>
+      <img src="../results/anomaly_vfm/E06_v1_anomalyvfm_dinov2_zero_shot/export/E06_anomalyvfm_qualitative_six_frames.png">
+      <figcaption>
+        Le mappe rispondono spesso a massicciata, bordi e vegetazione invece
+        delle persone annotate.
+      </figcaption>
+    </figure>
+  </div>
+  <div class="summary critical">
+    <strong>Risultato metodologico centrale.</strong>
+    Una classificazione di frame perfetta non dimostra una corretta
+    localizzazione. È necessario valutare separatamente score, spazio e
+    qualità del candidato.
+  </div>
+</section>
+
+<section class="page">
+  <h1>8. E07–E08: benchmark termico esterno</h1>
+  <h2>E07 — AnomalyVFM</h2>
+  <p>
+    Quando normali e anomalie appartengono agli stessi clip, la separazione
+    perfetta E06 scompare. La soglia nativa e una soglia calibrata sui normali
+    vengono riportate separatamente.
+  </p>
+  <table>
+    <thead><tr><th>Protocollo</th><th>Soglia</th><th>Precision</th><th>Recall</th><th>F1</th><th>AUROC</th><th>AP</th></tr></thead>
+    <tbody>
+      <tr><td>Nativo</td><td>0,500</td><td>0,316</td><td>0,059</td><td>0,099</td><td>0,462</td><td>0,309</td></tr>
+      <tr><td>Calibrato</td><td>0,465</td><td>0,316</td><td>0,110</td><td>0,164</td><td>0,462</td><td>0,309</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Lo smoothing 11 porta AUROC a 0,465. Nella valutazione degli eventi a
+    tIoU 0,3 ottiene precision 0,176, recall 0,103 e F1 0,130. La calibrazione
+    modifica il punto operativo, non il ranking.
+  </p>
+  <figure>
+    <img src="../results/anomaly_vfm/E07_v1_anomalyvfm_external_zero_shot/export/E07_quantitative_overview.png">
+    <figcaption>
+      E07. Distribuzioni sovrapposte, ROC vicina al caso casuale e forte
+      variabilità fra clip.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="page">
+  <h2>E08 — AnomalyDINO 16/64/200-shot</h2>
+  <p>
+    E08 usa lo stesso test E07, 200 clip normali per memorie annidate e 100
+    clip normali disgiunti per la calibrazione. Non esiste sovrapposizione fra
+    riferimento, calibrazione e test.
+  </p>
+  <table>
+    <thead><tr><th>Riferimenti</th><th>Soglia</th><th>Precision</th><th>Recall</th><th>F1</th><th>AUROC</th><th>AP</th></tr></thead>
+    <tbody>
+      <tr><td>16</td><td>0,446</td><td>0,503</td><td>0,071</td><td>0,125</td><td><strong>0,593</strong></td><td><strong>0,400</strong></td></tr>
+      <tr><td>64</td><td>0,353</td><td>0,472</td><td>0,105</td><td>0,172</td><td>0,560</td><td>0,382</td></tr>
+      <tr><td>200</td><td>0,293</td><td>0,418</td><td>0,153</td><td><strong>0,224</strong></td><td>0,578</td><td>0,379</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Il 16-shot ha il miglior ranking globale; il 200-shot ha miglior F1 e
+    AUROC media per clip 0,621. Con smoothing 11, il 200-shot raggiunge F1
+    degli eventi 0,263 a tIoU 0,3. L'effetto del numero di riferimenti non è
+    monotono su tutte le metriche.
+  </p>
+  <figure>
+    <img src="../results/anomaly_dino/E08_v1_anomalydino_external_nested_shots/export/E08_quantitative_overview.png">
+    <figcaption>
+      E08. AnomalyDINO supera AnomalyVFM sul ranking globale, ma recall e
+      separazione rimangono insufficienti per un uso affidabile.
+    </figcaption>
+  </figure>
+  <figure>
+    <img src="../results/anomaly_dino/E08_v1_anomalydino_external_nested_shots/export/E08_qualitative_errors_200shot.png">
+    <figcaption>
+      Veri positivi, falsi positivi e falsi negativi E08. Le mappe rispondono
+      a salienza termica, luci, veicoli e strutture calde, non necessariamente
+      alla semantica dell'evento.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="page">
+  <h1>9. E09: raffinamento automatico con SAM2</h1>
+  <h2>Protocollo</h2>
+  <p>
+    E09 chiude la pipeline proposta dal relatore. Per ciascuno dei 500 frame
+    San Donato, il massimo della mappa AnomalyDINO E05 diventa un punto
+    positivo per SAM 2.1 Small. Non esistono prompt manuali. La baseline è la
+    componente top 1% che contiene lo stesso punto. La box della maschera SAM2
+    e la baseline sono confrontate con la migliore box persona CVAT.
+  </p>
+  <table>
+    <thead><tr><th>Metodo</th><th>IoU media</th><th>IoU mediana</th><th>Hit@0,3</th><th>Hit@0,5</th></tr></thead>
+    <tbody>
+      <tr><td>Componente AnomalyDINO</td><td>0,501</td><td>0,506</td><td>0,928</td><td>0,534</td></tr>
+      <tr><td><strong>SAM2 da punto automatico</strong></td><td><strong>0,717</strong></td><td><strong>0,757</strong></td><td><strong>0,976</strong></td><td><strong>0,934</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="metric-grid">
+    <div class="metric"><strong>457/500</strong>frame migliorati</div>
+    <div class="metric"><strong>+0,215</strong>guadagno IoU medio</div>
+    <div class="metric"><strong>98 s</strong>per 504 maschere</div>
+    <div class="metric"><strong>0,61 GB</strong>picco GPU</div>
+  </div>
+  <figure>
+    <img src="../results/sam_refinement/E09_v1_anomalydino_point_sam2/export/E09_quantitative_comparison.png">
+    <figcaption>
+      E09. Il raffinamento migliora nettamente la geometria del candidato
+      selezionato lungo quasi tutta la clip.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="page">
+  <h2>Casi qualitativi e controllo negativo</h2>
+  <figure>
+    <img src="../results/sam_refinement/E09_v1_anomalydino_point_sam2/export/E09_qualitative_six_frames.png">
+    <figcaption>
+      Successi e fallimenti E09. SAM2 migliora fortemente un punto valido, ma
+      può peggiorare la box o segmentare una regione sbagliata se il punto a
+      monte è scorretto.
+    </figcaption>
+  </figure>
+  <figure>
+    <img src="../results/sam_refinement/E09_v1_anomalydino_point_sam2/export/E09_normal_false_positives.png">
+    <figcaption>
+      I quattro falsi positivi normali di E05 restano quattro: SAM2 segmenta
+      coerentemente la massicciata indicata dal punto, ma non può cambiare la
+      decisione di anomalia del modulo precedente.
+    </figcaption>
+  </figure>
+  <div class="summary success">
+    <strong>Conclusione E09.</strong>
+    SAM2 è un rifinitore geometrico efficace quando il candidato è valido.
+    Non è un correttore semantico e non sostituisce l'anomaly detector.
+  </div>
+</section>
+
+<section class="page">
+  <h1>10. Conclusioni scientifiche</h1>
+  <ol>
+    <li>
+      <strong>Il dominio termico è trattabile dai foundation model, ma con
+      ruoli distinti.</strong> SAM2 segmenta e segue bene; AnomalyDINO produce
+      candidati; Grounding DINO propone categorie; AnomalyVFM fornisce score
+      zero-shot ma generalizza male sul benchmark esterno.
+    </li>
+    <li>
+      <strong>Score e localizzazione devono essere separati.</strong> E06 ha
+      F1 frame 1,000 ma pointing persona 0,014.
+    </li>
+    <li>
+      <strong>Il domain shift può simulare prestazioni perfette.</strong>
+      E05/E06 separano due video diversi; E07/E08, con normali e anomalie nella
+      stessa scena, danno risultati molto più modesti.
+    </li>
+    <li>
+      <strong>I riferimenti normali aiutano, ma non monotonicamente.</strong>
+      E08 mostra ranking globale migliore con 16 riferimenti e comportamento
+      intra-clip/F1 migliore con 200.
+    </li>
+    <li>
+      <strong>SAM2 migliora la forma, non la decisione.</strong> E09 aumenta
+      l'IoU media di 0,215, ma lascia invariati i falsi positivi di frame.
+    </li>
+    <li>
+      <strong>La qualità della ground truth è parte del risultato.</strong>
+      La revisione CVAT cambia sensibilmente la lettura quantitativa E01.
+    </li>
+  </ol>
+  <h2>Risposta sintetica alla domanda della tesi</h2>
+  <div class="summary">
+    I foundation model visuali possono supportare la localizzazione di
+    anomalie termiche in un sistema modulare. La soluzione più convincente
+    non è un singolo modello, ma una pipeline in cui un detector di anomalia
+    propone candidati e SAM2 li rifinisce. La robustezza resta limitata dalla
+    definizione contestuale dell'anomalia, dal domain shift, dalla qualità del
+    candidato iniziale e dalla disponibilità di ground truth spaziale.
+  </div>
+</section>
+
+<section class="page">
+  <h1>11. Limiti e decisioni da discutere con il relatore</h1>
+  <h2>Limiti dichiarati</h2>
+  <ul>
+    <li>numero limitato di video ferroviari e correlazione temporale dei frame;</li>
+    <li>scene diverse nel confronto ferroviario normale/anomalo E05–E06;</li>
+    <li>assenza di maschere pixel-level: la segmentazione viene valutata tramite box;</li>
+    <li>benchmark esterno con annotazioni soltanto temporali;</li>
+    <li>un solo punto E09 recupera al massimo un oggetto per frame;</li>
+    <li>nessun fine-tuning supervisionato sui video ferroviari;</li>
+    <li>risultati preliminari, non validazione per impiego operativo.</li>
+  </ul>
+  <h2>Decisioni richieste al professore</h2>
+  <ol>
+    <li>
+      Confermare il titolo di lavoro:
+      <em>Localizzazione di anomalie in immagini termiche mediante foundation
+      model visuali e segmentazione prompt-based</em>.
+    </li>
+    <li>
+      Confermare che E04 resti documentato come pilot storico non eseguito,
+      senza aggiungere ora una baseline meno rigorosa.
+    </li>
+    <li>
+      Confermare che il fine-tuning sia indicato come sviluppo futuro:
+      aggiungerlo a dieci giorni dalla laurea ridurrebbe tempo per scrittura e
+      non risolverebbe la scarsità di ground truth indipendente.
+    </li>
+    <li>
+      Confermare l'uso di E07–E08 come controllo di generalizzazione, pur
+      trattandosi di un dominio portuale e non ferroviario.
+    </li>
+    <li>
+      Confermare che le track <span class="mono">incerto</span> rimangano
+      escluse dalla metrica persona principale e discusse separatamente.
+    </li>
+    <li>
+      Confermare quali frame e video possano essere mostrati nella tesi e
+      nelle slide finali.
+    </li>
+    <li>
+      Confermare durata e formato della discussione; la proposta è 10–15
+      minuti con 10–12 slide.
+    </li>
+  </ol>
+</section>
+
+<section class="page">
+  <h1>12. Piano di chiusura della tesi</h1>
+  <table>
+    <thead><tr><th>Fase</th><th>Contenuto</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>1. Teoria</td><td>Termico, anomaly detection, DINOv2, SAM/SAM2, zero-shot, metriche</td><td>Capitoli 1–2</td></tr>
+      <tr><td>2. Metodo</td><td>Dati, CVAT, split, pipeline, riproducibilità</td><td>Capitolo 3</td></tr>
+      <tr><td>3. Esperimenti</td><td>E01–E09, tabelle e figure definitive</td><td>Capitolo 4</td></tr>
+      <tr><td>4. Discussione</td><td>Domain shift, score vs spazio, errori, limiti</td><td>Capitolo 5</td></tr>
+      <tr><td>5. Chiusura</td><td>Conclusioni, abstract, bibliografia, revisione</td><td>PDF tesi</td></tr>
+      <tr><td>6. Discussione</td><td>10–12 slide, copione e prove cronometrate</td><td>PPTX/PDF slide</td></tr>
+    </tbody>
+  </table>
+  <div class="summary warning">
+    <strong>Raccomandazione per i prossimi giorni.</strong>
+    Non aprire una nuova campagna pesante salvo richiesta esplicita del
+    relatore. I risultati coprono già tracking, proposta testuale, anomaly
+    detection reference-based, zero-shot, generalizzazione esterna e
+    raffinamento automatico. La priorità adesso è trasformarli in una tesi
+    coerente e verificata.
+  </div>
+  <h2>Materiale pronto</h2>
+  <ul>
+    <li>registro completo degli esperimenti;</li>
+    <li>diario di lavoro e protocolli;</li>
+    <li>notebook eseguiti E01, E02, E05, E06, E08, E09;</li>
+    <li>pacchetti finali E01–E09 con CSV, mappe, maschere e figure;</li>
+    <li>template LaTeX e template slide ufficiali UniFi;</li>
+    <li>bibliografia iniziale e analisi delle fonti del relatore;</li>
+    <li>grafici già adatti a relazione e presentazione.</li>
+  </ul>
+</section>
+
+<section class="page">
+  <h1>Appendice A — Riproducibilità</h1>
+  <table>
+    <thead><tr><th>Componente</th><th>Versione congelata</th></tr></thead>
+    <tbody>
+      <tr><td>SAM2</td><td class="mono">2b90b9f5ceec907a1c18123530e92e794ad901a4</td></tr>
+      <tr><td>SAM2.1 Small checkpoint</td><td class="mono">SHA256 6d1aa6f30de5c92224f8172114de081d104bbd23dd9dc5c58996f0cad5dc4d38</td></tr>
+      <tr><td>AnomalyDINO</td><td class="mono">b9d1c2648e3a5247437d4d953d907a8f3d994457</td></tr>
+      <tr><td>DINOv2 ViT-S/14</td><td class="mono">SHA256 b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9</td></tr>
+      <tr><td>AnomalyVFM</td><td class="mono">4da96b493a0b12e4e380fa5bf6573c126342855c</td></tr>
+      <tr><td>AnomalyVFM checkpoint</td><td class="mono">revision c7698cefc6415ca43c93c3e924e02f6863c57e73</td></tr>
+      <tr><td>Hardware</td><td>Google Colab / Kaggle, NVIDIA Tesla T4</td></tr>
+    </tbody>
+  </table>
+  <h2>Pacchetti principali</h2>
+  <table>
+    <thead><tr><th>Esperimento</th><th>SHA256 del pacchetto finale</th></tr></thead>
+    <tbody>
+      <tr><td>E01-v2</td><td class="mono">pacchetto e notebook archiviati nella repository</td></tr>
+      <tr><td>E02-v2</td><td class="mono">b1a3c42b1e74315d9126eb35880052ca42f21a7b832eafcc0149d5ba4ac43f3c</td></tr>
+      <tr><td>E05</td><td class="mono">c560204ae8c0a93e55e57ab30e28e1ef5b0eb6947e7ae48265ad2ebc8f3eca2a</td></tr>
+      <tr><td>E06</td><td class="mono">9175e8f87e2c2a1db6b5bf74e5150020e70ca8be0c46f9c9d8a56afe7dd3d864</td></tr>
+      <tr><td>E07</td><td class="mono">9e50514c0fb6a3aa4f9709dbd0c53d5636bcb6d71e20c26a12fa87332cf3d74f</td></tr>
+      <tr><td>E08</td><td class="mono">675d1cde8a69ab92989813c9bc0871b0a98ddbbc4202e336e93a197cafb35fb0</td></tr>
+      <tr><td>E09</td><td class="mono">93fc9d4aec71d022b0bad76dfbce4a16be8d0bacb55ff174a9011f2e375bed0c</td></tr>
+    </tbody>
+  </table>
+  <p class="footer">
+    Documento generato dai risultati verificati presenti nella repository
+    locale. Le metriche riportate derivano dai CSV finali, non da trascrizione
+    manuale degli screenshot.
+  </p>
+</section>
+
+<section class="page">
+  <h1>Appendice B — Cosa mostrare durante il ricevimento</h1>
+  <ol>
+    <li><strong>Aprire questo PDF</strong> e restare sulle prime due pagine per la sintesi.</li>
+    <li><strong>Mostrare la tabella E01–E09</strong> per chiarire immediatamente l'ampiezza del lavoro.</li>
+    <li><strong>Mostrare E01/E02</strong> per il ruolo di SAM2 e Grounding DINO.</li>
+    <li><strong>Mostrare il contrasto E05–E06</strong>: score perfetti, localizzazione diversa.</li>
+    <li><strong>Mostrare E07–E08</strong> per la verifica del domain shift.</li>
+    <li><strong>Concludere con E09</strong>: miglioramento IoU e limite del punto errato.</li>
+    <li><strong>Terminare con le sette decisioni richieste</strong>, senza aprire codice salvo domanda.</li>
+  </ol>
+  <div class="summary success">
+    <strong>Frase conclusiva consigliata.</strong>
+    «Il risultato che considero più importante non è una metrica isolata, ma
+    aver separato correttamente detection dell'anomalia, localizzazione e
+    segmentazione. AnomalyDINO propone il candidato, SAM2 ne migliora
+    nettamente la geometria, ma gli errori del modulo a monte restano. Vorrei
+    confermare con lei che questo sia il nucleo definitivo della tesi e
+    passare ora alla stesura.»
+  </div>
+</section>
+
+</body>
+</html>

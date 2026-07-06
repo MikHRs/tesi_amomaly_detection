@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Relazione tecnica del lavoro svolto — Anomaly detection in video termici ferroviari</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+    :root {
+      --ink: #172033;
+      --muted: #536174;
+      --accent: #176b87;
+      --accent2: #2f8f72;
+      --soft: #edf5f7;
+      --warn: #fff3d8;
+      --danger: #fdeaea;
+      --line: #cbd5df;
+      --code: #f4f6f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "DejaVu Sans", Arial, sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.48;
+    }
+    h1, h2, h3, h4 {
+      color: #113d53;
+      line-height: 1.18;
+      page-break-after: avoid;
+    }
+    h1 { font-size: 24pt; margin: 0 0 10mm; }
+    h2 {
+      font-size: 17pt;
+      margin-top: 9mm;
+      padding-bottom: 2mm;
+      border-bottom: 1.5px solid var(--accent);
+    }
+    h3 { font-size: 13pt; margin-top: 6mm; }
+    h4 { font-size: 11pt; margin-top: 4mm; }
+    p { margin: 2.2mm 0; text-align: justify; }
+    ul, ol { margin: 2mm 0 3mm 6mm; padding-left: 5mm; }
+    li { margin: 1mm 0; }
+    a { color: #0d5f84; text-decoration: none; }
+    code {
+      font-family: "DejaVu Sans Mono", monospace;
+      font-size: 8.9pt;
+      background: var(--code);
+      padding: 0.2mm 0.8mm;
+      border-radius: 1mm;
+    }
+    pre {
+      font-family: "DejaVu Sans Mono", monospace;
+      font-size: 8.15pt;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: var(--code);
+      border: 1px solid #d7dde4;
+      border-left: 4px solid var(--accent);
+      padding: 3mm;
+      border-radius: 1.5mm;
+      page-break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3mm 0 5mm;
+      font-size: 9.1pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 1.8mm 2mm;
+      vertical-align: top;
+    }
+    th { background: #e9f1f4; text-align: left; color: #153e52; }
+    tr:nth-child(even) td { background: #fafcfd; }
+    .cover {
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 8mm 3mm;
+    }
+    .cover .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 10pt;
+    }
+    .cover h1 { font-size: 30pt; max-width: 155mm; margin-top: 22mm; }
+    .cover .subtitle {
+      font-size: 15pt;
+      color: var(--muted);
+      max-width: 155mm;
+    }
+    .cover .meta {
+      border-top: 2px solid var(--accent);
+      padding-top: 5mm;
+      display: grid;
+      grid-template-columns: 42mm auto;
+      gap: 2mm 6mm;
+      font-size: 10pt;
+    }
+    .page-break { page-break-before: always; }
+    .toc {
+      page-break-after: always;
+      columns: 2;
+      column-gap: 12mm;
+    }
+    .toc a { display: block; margin: 1.5mm 0; }
+    .toc .l2 { font-weight: 700; margin-top: 3mm; }
+    .toc .l3 { padding-left: 4mm; font-size: 9.2pt; color: #31566a; }
+    .callout {
+      margin: 4mm 0;
+      padding: 3mm 4mm;
+      border-left: 4px solid var(--accent2);
+      background: #edf7f3;
+      page-break-inside: avoid;
+    }
+    .callout.warn { background: var(--warn); border-left-color: #d69216; }
+    .callout.danger { background: var(--danger); border-left-color: #bb3f3f; }
+    .status {
+      display: inline-block;
+      padding: 0.5mm 2mm;
+      border-radius: 4mm;
+      font-size: 8.5pt;
+      font-weight: 700;
+      background: #dff3ea;
+      color: #176342;
+    }
+    .status.planned { background: #e7edf8; color: #314e82; }
+    .status.provisional { background: #fff0cb; color: #835a00; }
+    .pipeline {
+      display: flex;
+      align-items: stretch;
+      gap: 2mm;
+      margin: 5mm 0;
+      page-break-inside: avoid;
+    }
+    .pipeline .box {
+      flex: 1;
+      border: 1px solid #9eb5c1;
+      background: var(--soft);
+      padding: 3mm;
+      text-align: center;
+      border-radius: 2mm;
+      font-size: 9pt;
+    }
+    .pipeline .arrow {
+      display: flex;
+      align-items: center;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    figure {
+      margin: 5mm 0 6mm;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    figure img {
+      max-width: 100%;
+      max-height: 178mm;
+      object-fit: contain;
+      border: 1px solid #ccd5dc;
+    }
+    figcaption {
+      margin-top: 2mm;
+      color: var(--muted);
+      font-size: 8.6pt;
+      text-align: left;
+    }
+    .small { font-size: 8.7pt; color: var(--muted); }
+    .nowrap { white-space: nowrap; }
+    .formula {
+      text-align: center;
+      font-family: "DejaVu Serif", serif;
+      font-size: 11pt;
+      padding: 2mm;
+    }
+    .file { font-family: "DejaVu Sans Mono", monospace; font-size: 8.5pt; }
+    .checklist li::marker { color: var(--accent2); }
+    .footer-note {
+      margin-top: 10mm;
+      border-top: 1px solid var(--line);
+      padding-top: 3mm;
+      color: var(--muted);
+      font-size: 8.5pt;
+    }
+  </style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="eyebrow">Tesi triennale in Ingegneria Informatica</div>
+    <h1>Anomaly detection e localizzazione in video termici ferroviari</h1>
+    <div class="subtitle">
+      Relazione tecnica completa del lavoro svolto, degli esperimenti,
+      dei risultati provvisori e del codice sviluppato
+    </div>
+  </div>
+  <div class="meta">
+    <strong>Studente</strong><span>Michele</span>
+    <strong>Documento</strong><span>Relazione di avanzamento tecnico</span>
+    <strong>Versione</strong><span>1.0</span>
+    <strong>Data</strong><span>3 luglio 2026</span>
+    <strong>Progetto</strong><span class="file">tesi_anomaly_detection</span>
+    <strong>Stato</strong><span>E01–E03 eseguiti; E04 preparato e non ancora eseguito</span>
+  </div>
+</section>
+
+<section>
+  <h1>Nota di lettura</h1>
+  <div class="callout">
+    <strong>Obiettivo scientifico vincolante.</strong>
+    Il lavoro riguarda l’<em>anomaly detection/localization</em>, non la sola
+    object detection. Grounding DINO può proporre regioni, mentre SAM2 può
+    segmentarle e seguirle; nessuno dei due stabilisce automaticamente se un
+    evento sia anomalo. Il primo esperimento che apprende esplicitamente la
+    normalità è E04, già preparato ma non ancora eseguito.
+  </div>
+  <p>
+    Questo documento descrive soltanto attività, dati e risultati realmente
+    presenti nel progetto alla data indicata. Le metriche E01 ed E02 sono
+    dichiarate provvisorie perché alcune track CVAT devono essere corrette.
+    Non sono stati inventati risultati per E04.
+  </p>
+</section>
+
+<nav class="toc">
+  <h2>Indice</h2>
+  <a class="l2" href="#s1">1. Contesto, obiettivo e definizioni</a>
+  <a class="l3" href="#s1-1">1.1 Anomaly detection vs object detection</a>
+  <a class="l3" href="#s1-2">1.2 Ruolo di CVAT, Grounding DINO e SAM2</a>
+  <a class="l2" href="#s2">2. Organizzazione del progetto</a>
+  <a class="l3" href="#s2-1">2.1 Struttura della repository</a>
+  <a class="l3" href="#s2-2">2.2 Riproducibilità e protezione dei dati</a>
+  <a class="l2" href="#s3">3. Dati video e inventario</a>
+  <a class="l2" href="#s4">4. Annotazione CVAT e ground truth</a>
+  <a class="l3" href="#s4-1">4.1 Protocollo</a>
+  <a class="l3" href="#s4-2">4.2 Export e conversione</a>
+  <a class="l3" href="#s4-3">4.3 Problemi di qualità rilevati</a>
+  <a class="l2" href="#s5">5. Esperimento E01 — SAM2 con box manuale</a>
+  <a class="l2" href="#s6">6. Esperimento E02 — Grounding DINO → SAM2</a>
+  <a class="l2" href="#s7">7. Esperimento E03 — sensibilità al prompt</a>
+  <a class="l2" href="#s8">8. Passaggio alla vera anomaly detection</a>
+  <a class="l2" href="#s9">9. Preparazione E04 one-class</a>
+  <a class="l3" href="#s9-1">9.1 Costruzione dello split</a>
+  <a class="l3" href="#s9-2">9.2 Metodo previsto</a>
+  <a class="l3" href="#s9-3">9.3 Metriche previste</a>
+  <a class="l2" href="#s10">10. Spiegazione precisa del codice Python</a>
+  <a class="l3" href="#s10-1">10.1 Script per video e clip</a>
+  <a class="l3" href="#s10-2">10.2 Script CVAT e visualizzazione</a>
+  <a class="l3" href="#s10-3">10.3 Metriche e valutazione</a>
+  <a class="l3" href="#s10-4">10.4 Configurazioni e stub SAM2</a>
+  <a class="l3" href="#s10-5">10.5 build_anomaly_dataset.py</a>
+  <a class="l2" href="#s11">11. Spiegazione dei notebook Colab</a>
+  <a class="l2" href="#s12">12. Test, controlli e artefatti salvati</a>
+  <a class="l2" href="#s13">13. Limiti attuali e rischi metodologici</a>
+  <a class="l2" href="#s14">14. Prossimi passi ordinati</a>
+  <a class="l2" href="#s15">15. Materiale utilizzabile nella tesi e nelle slide</a>
+  <a class="l2" href="#s16">16. Riferimenti essenziali</a>
+</nav>
+
+<section id="s1">
+  <h2>1. Contesto, obiettivo e definizioni</h2>
+  <p>
+    Il dominio applicativo è la sorveglianza di aree ferroviarie tramite
+    telecamere termiche. Nei video possono comparire persone, pallet, scatole,
+    assi o altri elementi che non dovrebbero trovarsi sui binari o nelle aree
+    di sicurezza. La label principale fissata per la ground truth è
+    <code>anomalia</code>. Il tipo dell’elemento può essere registrato come
+    attributo descrittivo, ma non deve trasformare il problema in una
+    classificazione supervisionata di categorie note.
+  </p>
+
+  <h3 id="s1-1">1.1 Anomaly detection vs object detection</h3>
+  <table>
+    <thead><tr><th>Compito</th><th>Domanda</th><th>Output</th><th>Uso nel progetto</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Object detection</td>
+        <td>“Che oggetto è e dove si trova?”</td>
+        <td>Classe, score e bounding box</td>
+        <td>Solo modulo ausiliario o baseline</td>
+      </tr>
+      <tr>
+        <td>Anomaly detection</td>
+        <td>“Quanto questo frame o questa regione si discosta dalla normalità?”</td>
+        <td>Anomaly score, decisione normale/anomalo, eventuale heatmap</td>
+        <td>Obiettivo scientifico finale</td>
+      </tr>
+      <tr>
+        <td>Anomaly localization</td>
+        <td>“In quale zona del frame si trova lo scostamento?”</td>
+        <td>Heatmap, punto, box o maschera</td>
+        <td>Obiettivo associato alla detection</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Una persona riconosciuta non è automaticamente un’anomalia: dipende dalla
+    posizione e dal contesto. Simmetricamente, un’anomalia sconosciuta potrebbe
+    non appartenere a nessuna classe prevista da un detector. Per questo E01,
+    E02 ed E03 sono esperimenti utili di segmentazione, tracking e proposta di
+    regioni, ma non costituiscono da soli una soluzione completa di anomaly
+    detection.
+  </p>
+
+  <h3 id="s1-2">1.2 Ruolo di CVAT, Grounding DINO e SAM2</h3>
+  <div class="pipeline">
+    <div class="box"><strong>CVAT</strong><br>produce la ground truth umana</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Valutazione</strong><br>confronta output e riferimento</div>
+  </div>
+  <div class="pipeline">
+    <div class="box"><strong>Grounding DINO</strong><br>testo → box candidate</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>SAM2</strong><br>box/punto → maschera e track</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Modulo di anomalia</strong><br>normalità → anomaly score</div>
+  </div>
+  <ul>
+    <li><strong>CVAT</strong> non è un modello: è lo strumento con cui si annota la risposta corretta.</li>
+    <li><strong>Grounding DINO</strong> è stato usato come detector open-vocabulary per ottenere box da prompt testuali.</li>
+    <li><strong>SAM2</strong> è stato usato come segmentatore e tracker video promptable.</li>
+    <li><strong>E04</strong> usa soltanto frame normali per costruire una memoria della normalità e produrre anomaly score.</li>
+  </ul>
+</section>
+
+<section id="s2">
+  <h2>2. Organizzazione del progetto</h2>
+  <p>
+    È stata creata la cartella di lavoro
+    <code>tesi_anomaly_detection</code>. La parola “repository” indica
+    principalmente una struttura ordinata e riproducibile: non significa che
+    i video siano stati pubblicati online. Git è inizializzato localmente, ma
+    i dati sensibili e i risultati pesanti sono esclusi dal versionamento.
+  </p>
+
+  <h3 id="s2-1">2.1 Struttura della repository</h3>
+  <pre>tesi_anomaly_detection/
+├── README.md                 guida operativa principale
+├── requirements.txt         dipendenze leggere
+├── configs/                 parametri, prompt e protocollo E04
+├── data/
+│   ├── raw/                 copie di lavoro dei video originali
+│   ├── clips/               clip brevi
+│   ├── exports_cvat/        export CVAT
+│   └── processed/           dataset derivati riproducibili
+├── docs/                    protocollo, diario, esperimenti e relazione
+├── notebooks/               notebook Colab E01, E02 ed E04
+├── src/                     script Python riutilizzabili
+├── tests/                   test delle funzioni principali
+└── results/
+    ├── inventory/           inventario dei video
+    ├── annotations/         box CVAT convertite
+    ├── metrics/             tabelle quantitative
+    └── qualitative/         immagini, video, maschere e metadati</pre>
+
+  <h3 id="s2-2">2.2 Riproducibilità e protezione dei dati</h3>
+  <ul>
+    <li>I video originali non vengono modificati dagli script.</li>
+    <li><code>data/raw/</code>, export, clip, frame, risultati, checkpoint e ZIP sono ignorati da Git.</li>
+    <li>Le configurazioni leggere rimangono in YAML e i risultati in CSV/JSON.</li>
+    <li>I modelli pesanti non sono inseriti nei requisiti principali e vengono usati in Colab in un ambiente separato.</li>
+    <li>È stato creato il backup locale <code>tesi_backup_2026-07-03_17-07.tar.gz</code>.</li>
+  </ul>
+  <div class="callout warn">
+    I dati del relatore sono stati caricati su servizi cloud durante i pilot
+    operativi. In una versione finale della tesi va riportata e rispettata
+    l’autorizzazione ricevuta, evitando qualunque pubblicazione dei video.
+  </div>
+</section>
+
+<section id="s3">
+  <h2>3. Dati video e inventario</h2>
+  <p>
+    I tre video sono stati copiati in <code>data/raw/</code> e controllati con
+    OpenCV. Tutti risultano leggibili, con codec H.264 e risoluzione
+    640×512 pixel.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Video</th><th>Durata</th><th>FPS</th><th>Frame</th><th>Risoluzione</th><th>Codec</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="file">ir_2025-01-31_04-15-15.mp4</td>
+        <td>299,000 s</td><td>25,000</td><td>7.475</td><td>640×512</td><td>h264</td>
+      </tr>
+      <tr>
+        <td class="file">ir_2025-01-31_05-09-12.mp4</td>
+        <td>298,000 s</td><td>25,000</td><td>7.450</td><td>640×512</td><td>h264</td>
+      </tr>
+      <tr>
+        <td class="file">test_video_san_donato.mp4</td>
+        <td>263,011 s</td><td>24,99899</td><td>6.575</td><td>640×512</td><td>h264</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Il file prodotto è
+    <code>results/inventory/inventario_video.csv</code>. L’inventario permette
+    di controllare durata, frequenza, risoluzione e leggibilità prima di
+    estrarre frame o impostare annotazioni. Il primo video non è ancora stato
+    annotato e rimane disponibile come terzo task/possibile test aggiuntivo.
+  </p>
+</section>
+
+<section id="s4">
+  <h2>4. Annotazione CVAT e ground truth</h2>
+
+  <h3 id="s4-1">4.1 Protocollo</h3>
+  <p>
+    In CVAT Online è stato creato un progetto con tre task, uno per video. La
+    label principale è <code>anomalia</code>. Gli attributi proposti sono:
+  </p>
+  <ul>
+    <li><code>tipo</code>: persona, pallet, scatola, legno, oggetto generico, altro, incerto;</li>
+    <li><code>visibilita</code>: chiaro, parziale, difficile;</li>
+    <li><code>posizione</code>: sui binari, vicino ai binari, fuori ROI.</li>
+  </ul>
+  <p>
+    Per una track video si disegna una box sul soggetto, si aggiungono
+    keyframe quando posizione o forma cambiano e si usa <code>outside</code>
+    quando l’oggetto scompare. <code>occluded</code> segnala invece una
+    visibilità parziale. CVAT interpola automaticamente le box tra due
+    keyframe: questa funzione riduce il lavoro, ma richiede un controllo
+    visivo perché un’interpolazione può non seguire correttamente il soggetto.
+  </p>
+
+  <h3 id="s4-2">4.2 Export e conversione</h3>
+  <p>
+    Sono stati completati ed esportati in formato
+    <code>CVAT for video 1.1</code> due task:
+  </p>
+  <table>
+    <thead><tr><th>Video annotato</th><th>Track</th><th>Righe box interpolate</th><th>Frame con annotazioni</th><th>Intervallo</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="file">ir_2025-01-31_05-09-12.mp4</td>
+        <td>6</td><td>18.830</td><td>6.450</td><td>1.000–7.449</td>
+      </tr>
+      <tr>
+        <td class="file">test_video_san_donato.mp4</td>
+        <td>14</td><td>24.737</td><td>4.847</td><td>1.728–6.574</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Gli XML sono stati ispezionati, quindi convertiti nei CSV:
+    <code>ir_2025-01-31_05-09-12_boxes.csv</code> e
+    <code>test_video_san_donato_boxes.csv</code>. Ogni riga contiene video,
+    frame, ID della track, label, coordinate
+    <code>xtl, ytl, xbr, ybr</code>, <code>outside</code> e
+    <code>occluded</code>.
+  </p>
+
+  <h3 id="s4-3">4.3 Problemi di qualità rilevati</h3>
+  <p>
+    Il controllo ha evidenziato che alcune track sono state create con pochi
+    keyframe, prima che fosse chiaro che le annotazioni sarebbero servite come
+    ground truth quantitativa. In particolare, nella clip San Donato tra circa
+    98 e 101 secondi la box interpolata della persona è spostata rispetto al
+    soggetto reale. Di conseguenza le metriche E01 ed E02 penalizzano anche
+    predizioni visivamente corrette.
+  </p>
+  <figure>
+    <img src="../results/qualitative/sam2_pilot_01/comparison_frames/compare_00347.jpg"
+         alt="Confronto SAM2 e CVAT al frame problematico">
+    <figcaption>
+      Figura 1 — Frame di confronto attorno alla zona critica: la ground truth
+      CVAT richiede revisione. Questo esempio mostra perché la qualità delle
+      annotazioni è parte integrante della valutazione.
+    </figcaption>
+  </figure>
+  <div class="callout danger">
+    Prima di presentare metriche definitive bisogna correggere le track CVAT,
+    soprattutto nell’intervallo 98–101 secondi, e annotare il terzo video.
+  </div>
+</section>
+
+<section id="s5" class="page-break">
+  <h2>5. Esperimento E01 — SAM2 con box manuale</h2>
+  <p><span class="status provisional">Pilot completato — metriche provvisorie</span></p>
+  <table>
+    <tbody>
+      <tr><th>Video</th><td class="file">test_video_san_donato.mp4</td></tr>
+      <tr><th>Clip</th><td>85–105 secondi; frame sorgente 2.125–2.624</td></tr>
+      <tr><th>Dimensione</th><td>500 frame, circa 25 fps, 640×512</td></tr>
+      <tr><th>Modello</th><td>SAM 2.1 Small</td></tr>
+      <tr><th>Checkpoint</th><td class="file">sam2.1_hiera_small.pt</td></tr>
+      <tr><th>Hardware</th><td>Google Colab, NVIDIA Tesla T4</td></tr>
+      <tr><th>Fine-tuning</th><td>No</td></tr>
+      <tr><th>Prompt</th><td>Box manuale al frame 0: [392, 195, 438, 270]</td></tr>
+    </tbody>
+  </table>
+  <p>
+    È stata preparata localmente la clip
+    <code>san_donato_pilot_85_105.mp4</code>. In Colab è stato installato SAM2
+    dal repository ufficiale ed è stato scaricato il checkpoint Small. La
+    prima box era troppo ampia e produceva una maschera che includeva regioni
+    estranee; è stata quindi ristretta alla sola persona centrale. SAM2 ha
+    propagato la maschera per tutti i 500 frame.
+  </p>
+  <figure>
+    <img src="../results/qualitative/sam2_pilot_01/sam2_tracking_six_frames.png"
+         alt="Sei frame del tracking SAM2">
+    <figcaption>
+      Figura 2 — Campioni ai frame 0, 100, 200, 300, 400 e 499. La maschera
+      segue la stessa persona durante i cambiamenti di postura.
+    </figcaption>
+  </figure>
+
+  <h3>5.1 Risultato qualitativo</h3>
+  <ul>
+    <li>L’identità della persona centrale viene mantenuta per tutta la clip.</li>
+    <li>La maschera si adatta ai cambiamenti di postura.</li>
+    <li>Il tracking non passa alle altre persone visibili.</li>
+    <li>Nel primo frame rimane un piccolo componente spurio disconnesso sopra il soggetto.</li>
+  </ul>
+
+  <h3>5.2 Valutazione provvisoria rispetto a CVAT</h3>
+  <p>
+    La maschera SAM2 è stata trasformata nella box minima che la contiene e
+    confrontata con la track CVAT 1 sui 490 frame sorgente comuni
+    (2.135–2.624).
+  </p>
+  <table>
+    <thead><tr><th>Soglia IoU</th><th>TP</th><th>FP</th><th>FN</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead>
+    <tbody>
+      <tr><td>0,30</td><td>408</td><td>82</td><td>82</td><td>0,833</td><td>0,833</td><td>0,833</td></tr>
+      <tr><td>0,50</td><td>350</td><td>140</td><td>140</td><td>0,714</td><td>0,714</td><td>0,714</td></tr>
+    </tbody>
+  </table>
+  <p>
+    IoU media: <strong>0,587</strong>; IoU mediana:
+    <strong>0,662</strong>; minimo 0,040; massimo 0,965. Questi valori non sono
+    definitivi a causa dello spostamento della ground truth.
+  </p>
+  <div class="callout">
+    E01 dimostra la capacità di segmentazione e tracking quando è disponibile
+    un prompt geometrico corretto. Non dimostra il rilevamento autonomo di
+    anomalie, perché la box iniziale è manuale.
+  </div>
+</section>
+
+<section id="s6">
+  <h2>6. Esperimento E02 — Grounding DINO → box → SAM2</h2>
+  <p><span class="status provisional">Pilot completato — metriche provvisorie</span></p>
+  <p>
+    E02 automatizza la box iniziale tramite il prompt testuale
+    <code>person</code>. Grounding DINO Tiny viene eseguito sul primo frame;
+    le box con score almeno 0,30 vengono passate a SAM2.
+  </p>
+  <table>
+    <tbody>
+      <tr><th>Detector</th><td>IDEA-Research/grounding-dino-tiny</td></tr>
+      <tr><th>Prompt</th><td>person</td></tr>
+      <tr><th>Soglie</th><td>detection 0,20; text 0,15; selezione 0,30</td></tr>
+      <tr><th>Tracker</th><td>SAM 2.1 Small</td></tr>
+      <tr><th>Fine-tuning</th><td>No</td></tr>
+      <tr><th>Hardware</th><td>Google Colab, NVIDIA Tesla T4</td></tr>
+    </tbody>
+  </table>
+  <h3>6.1 Detection iniziale</h3>
+  <ul>
+    <li>persona al bordo sinistro: score 0,771;</li>
+    <li>persona centrale: score 0,631;</li>
+    <li>regione debole sullo sfondo: score 0,224, eliminata dalla soglia 0,30.</li>
+  </ul>
+  <figure>
+    <img src="../results/qualitative/grounded_sam2_pilot_02/gdino_person_detections_threshold_030.png"
+         alt="Detection Grounding DINO selezionate">
+    <figcaption>
+      Figura 3 — Le due box con score ≥0,30 usate come prompt geometrici per SAM2.
+    </figcaption>
+  </figure>
+  <p>
+    SAM2 ha propagato entrambe le identità per 500 frame senza scambiarle.
+    Tuttavia una terza persona entra successivamente e non viene scoperta,
+    perché il detector testuale è eseguito soltanto al frame iniziale.
+  </p>
+  <figure>
+    <img src="../results/qualitative/grounded_sam2_pilot_02/grounded_sam2_six_frames.png"
+         alt="Tracking di due persone con Grounding DINO e SAM2">
+    <figcaption>
+      Figura 4 — Tracking delle due persone inizializzate al frame 0. La
+      persona che entra dopo non riceve una nuova identità.
+    </figcaption>
+  </figure>
+
+  <h3>6.2 Matching provvisorio con le track CVAT</h3>
+  <table>
+    <thead><tr><th>Oggetto predetto</th><th>Track CVAT</th><th>Frame comuni</th><th>IoU media</th><th>IoU mediana</th><th>Frame IoU≥0,3</th><th>Frame IoU≥0,5</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>3</td><td>227</td><td>0,542</td><td>0,550</td><td>227</td><td>133</td></tr>
+      <tr><td>2</td><td>1</td><td>490</td><td>0,579</td><td>0,650</td><td>402</td><td>349</td></tr>
+    </tbody>
+  </table>
+  <p>
+    L’oggetto 1 è visibile per 273 frame prima dell’inizio della track CVAT 3:
+    ciò mostra una lacuna nella ground truth. Lo score di Grounding DINO
+    appartiene esclusivamente al frame iniziale e non deve essere interpretato
+    come confidenza per tutti i frame propagati.
+  </p>
+  <div class="callout">
+    E02 dimostra che un detector testuale può fornire prompt a SAM2. Rimane una
+    pipeline di object proposal e tracking: non assegna ancora un anomaly score
+    rispetto alla normalità della scena.
+  </div>
+</section>
+
+<section id="s7" class="page-break">
+  <h2>7. Esperimento E03 — sensibilità al prompt</h2>
+  <p><span class="status">Pilot del modulo ausiliario completato</span></p>
+  <p>
+    Sul frame sorgente 2.125 di San Donato sono stati confrontati sei prompt
+    mantenendo identici modello e soglie. Lo scopo è misurare la sensibilità
+    semantica di Grounding DINO, non valutare una soluzione finale di anomaly
+    detection.
+  </p>
+  <table>
+    <thead><tr><th>Prompt</th><th>Rilevamenti ≥0,20</th><th>Selezionati ≥0,30</th><th>Score massimo</th><th>Tempo</th></tr></thead>
+    <tbody>
+      <tr><td>person</td><td>3</td><td>2</td><td>0,771</td><td>3,09 s*</td></tr>
+      <tr><td>box</td><td>3</td><td>3</td><td>0,478</td><td>0,38 s</td></tr>
+      <tr><td>pallet</td><td>6</td><td>4</td><td>0,487</td><td>0,38 s</td></tr>
+      <tr><td>obstacle</td><td>7</td><td>5</td><td>0,508</td><td>0,38 s</td></tr>
+      <tr><td>foreign object</td><td>8</td><td>6</td><td>0,590</td><td>0,38 s</td></tr>
+      <tr><td>anomaly</td><td>6</td><td>2</td><td>0,558</td><td>0,38 s</td></tr>
+    </tbody>
+  </table>
+  <p class="small">
+    * Il primo tempo include warm-up e inizializzazione; non prova che
+    <code>person</code> sia intrinsecamente più lento.
+  </p>
+  <figure>
+    <img src="../results/qualitative/grounding_dino_prompt_sensitivity_e03/prompt_comparison.png"
+         alt="Confronto di sei prompt Grounding DINO">
+    <figcaption>
+      Figura 5 — Verde: box sopra la soglia 0,30. Rosso: rilevamenti deboli.
+      I prompt generici producono regioni più eterogenee.
+    </figcaption>
+  </figure>
+  <p>
+    <code>person</code> conserva le due persone visibili. Il prompt
+    <code>anomaly</code> seleziona la persona centrale e un oggetto, ma scarta
+    la persona al bordo sinistro. <code>obstacle</code> e
+    <code>foreign object</code> generano più candidati da verificare.
+  </p>
+  <div class="callout warn">
+    Il numero di box non è precision, recall o accuratezza: E03 usa un solo
+    frame e non dispone di ground truth distinta per ciascuna classe. Inoltre
+    la parola “anomaly” non trasforma un detector di oggetti in un metodo di
+    anomaly detection.
+  </div>
+</section>
+
+<section id="s8">
+  <h2>8. Passaggio alla vera anomaly detection</h2>
+  <p>
+    Dopo E03 è stata esplicitata una correzione metodologica importante:
+    l’obiettivo non è costruire una lista sempre più lunga di oggetti noti. Il
+    sistema deve apprendere o rappresentare la normalità della scena e
+    misurare lo scostamento di un nuovo frame o di una sua regione.
+  </p>
+  <div class="pipeline">
+    <div class="box"><strong>Frame normali</strong><br>nessuna box anomala attiva</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Memoria della normalità</strong><br>feature locali</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Nuovo frame</strong><br>distanza dalla memoria</div>
+    <div class="arrow">→</div>
+    <div class="box"><strong>Output</strong><br>score + heatmap</div>
+  </div>
+  <p>
+    Grounding DINO potrà rimanere come spiegazione semantica opzionale; SAM2
+    potrà rifinire o seguire una regione già considerata anomala. La decisione
+    primaria, però, deve provenire dallo scostamento dalla normalità.
+  </p>
+</section>
+
+<section id="s9">
+  <h2>9. Preparazione E04 one-class</h2>
+  <p><span class="status planned">Preparato — non ancora eseguito</span></p>
+
+  <h3 id="s9-1">9.1 Costruzione dello split</h3>
+  <p>
+    È stato creato <code>build_anomaly_dataset.py</code>. Lo script campiona i
+    due video annotati a 2 fps. Un frame è normale se non contiene box CVAT
+    attive; è anomalo se contiene almeno una box attiva. Per evitare confini
+    temporali incerti vengono esclusi i campioni la cui finestra di ±2 secondi
+    attraversa una transizione normale/anomalo.
+  </p>
+  <table>
+    <thead><tr><th>Video</th><th>Train normale</th><th>Validation normale</th><th>Test anomalo</th><th>Esclusi</th></tr></thead>
+    <tbody>
+      <tr><td class="file">ir_2025-01-31_05-09-12.mp4</td><td>61</td><td>15</td><td>512</td><td>8</td></tr>
+      <tr><td class="file">test_video_san_donato.mp4</td><td>108</td><td>27</td><td>383</td><td>8</td></tr>
+      <tr><th>Totale</th><th>169</th><th>42</th><th>895</th><th>16</th></tr>
+    </tbody>
+  </table>
+  <p>
+    Il dataset contiene 1.106 immagini JPEG e 3.473 box CVAT relative ai frame
+    anomali di test. Le box non entrano nel training. Il pacchetto verificato
+    per Colab è <code>anomaly_pilot_v3_colab.zip</code>, circa 100 MB, SHA-256:
+  </p>
+  <pre>9457b88634e4aad5735360c5ad68566c64f0ad23e0f6bb0c12d6aefb2988828f</pre>
+
+  <h3 id="s9-2">9.2 Metodo previsto</h3>
+  <p>
+    E04 implementa una baseline one-class a feature patch ispirata al
+    principio di PatchCore, ma non viene presentata come riproduzione
+    integrale del metodo.
+  </p>
+  <ol>
+    <li>Le immagini vengono ridimensionate a 224×280 e normalizzate con statistiche ImageNet.</li>
+    <li>Una ResNet18 pre-addestrata e congelata estrae la feature map fino a <code>layer3</code>.</li>
+    <li>Ogni posizione della feature map diventa un vettore locale normalizzato.</li>
+    <li>I vettori dei 169 frame normali formano una memoria, ridotta al massimo a 30.000 patch con seme 42.</li>
+    <li>Per ogni patch di validation/test si calcola la distanza euclidea dalla patch normale più vicina.</li>
+    <li>Le distanze locali formano la heatmap; il 99° percentile produce lo score del frame.</li>
+    <li>La soglia normale/anomalo è il 95° percentile degli score dei soli 42 frame normali di validation.</li>
+  </ol>
+  <div class="formula">a(p) = min<sub>m∈M</sub> ‖f(p) − m‖<sub>2</sub></div>
+  <div class="formula">A(frame) = percentile<sub>99</sub> { a(p) }</div>
+  <p>
+    Dove <em>M</em> è la memoria delle patch normali, <em>f(p)</em> è la
+    feature della patch <em>p</em>, <em>a(p)</em> è lo score locale e
+    <em>A(frame)</em> lo score globale.
+  </p>
+
+  <h3 id="s9-3">9.3 Metriche previste</h3>
+  <ul>
+    <li>AUROC e Average Precision a livello di frame;</li>
+    <li>precision, recall e F1 alla soglia scelta sulla validation normale;</li>
+    <li>matrice TN/FP/FN/TP;</li>
+    <li>heatmap qualitative;</li>
+    <li><em>pointing game</em>: il massimo della heatmap deve cadere dentro almeno una box CVAT.</li>
+  </ul>
+  <div class="callout danger">
+    Alla data del documento E04 non è stato eseguito. Non esistono ancora
+    AUROC, AP, F1 o heatmap E04 da riportare come risultati.
+  </div>
+</section>
+
+<section id="s10" class="page-break">
+  <h2>10. Spiegazione precisa del codice Python</h2>
+  <p>
+    Tutti gli script usano una struttura comune: funzioni riutilizzabili,
+    parser CLI con <code>argparse</code>, gestione esplicita degli errori e
+    funzione <code>main()</code> che restituisce 0 in caso di successo e 2 in
+    caso di input non valido. Le directory di output vengono create solo
+    quando necessario.
+  </p>
+
+  <h3 id="s10-1">10.1 Script per video e clip</h3>
+  <h4><span class="file">src/video_inventory.py</span></h4>
+  <table>
+    <thead><tr><th>Funzione</th><th>Responsabilità</th></tr></thead>
+    <tbody>
+      <tr><td><code>decode_fourcc()</code></td><td>Converte il codice numerico FourCC di OpenCV in una stringa leggibile, es. <code>h264</code>.</td></tr>
+      <tr><td><code>inspect_video()</code></td><td>Apre un video, legge FPS, frame count, larghezza, altezza e codec; calcola <code>durata = frame_count / fps</code>; registra l’errore senza interrompere l’inventario.</td></tr>
+      <tr><td><code>find_videos()</code></td><td>Cerca ricorsivamente estensioni MP4, AVI, MOV e MKV.</td></tr>
+      <tr><td><code>build_inventory()</code></td><td>Ispeziona tutti i video e scrive il CSV con le colonne definite in <code>FIELDNAMES</code>.</td></tr>
+    </tbody>
+  </table>
+  <pre>python src/video_inventory.py \
+  --input data/raw \
+  --output results/inventory/inventario_video.csv</pre>
+  <p>
+    Il campo <code>ok=False</code> consente di conservare anche la riga di un
+    video illeggibile, insieme al messaggio nel campo <code>error</code>.
+  </p>
+
+  <h4><span class="file">src/extract_frames.py</span></h4>
+  <p>
+    <code>extraction_times()</code> genera timestamp nell’intervallo
+    semiaperto [start, end), separati da <code>1 / target_fps</code>.
+    <code>extract_frames()</code> converte ogni timestamp nell’indice sorgente
+    con <code>round(time × source_fps)</code>, evita duplicati, legge il frame
+    e salva JPEG e indice CSV.
+  </p>
+  <pre>python src/extract_frames.py \
+  --video data/raw/test_video_san_donato.mp4 \
+  --out data/frames/san_donato \
+  --fps 1 --start 10 --end 30</pre>
+  <p>
+    Lo script valida FPS, intervallo e presenza del file. Non consente una
+    frequenza di estrazione superiore a quella del video. Il file
+    <code>frames.csv</code> mantiene il collegamento tra immagine, frame
+    originale e timestamp.
+  </p>
+
+  <h4><span class="file">src/make_clip.py</span></h4>
+  <p>
+    <code>make_clip()</code> converte start/end in indici, posiziona
+    <code>VideoCapture</code> al primo frame e scrive l’intervallo
+    [start, end) con FPS e risoluzione originali. Usa <code>mp4v</code> per
+    MP4 e <code>XVID</code> per AVI. OpenCV non conserva l’audio.
+  </p>
+  <pre>python src/make_clip.py \
+  --video data/raw/test_video_san_donato.mp4 \
+  --start 85 --end 105 \
+  --out data/clips/san_donato_pilot_85_105.mp4</pre>
+
+  <h3 id="s10-2">10.2 Script CVAT e visualizzazione</h3>
+  <h4><span class="file">src/inspect_cvat_export.py</span></h4>
+  <p>
+    Usa <code>xml.etree.ElementTree</code>. <code>local_name()</code> rimuove
+    eventuali namespace XML. <code>inspect_xml()</code> conta immagini, track,
+    box, poligoni e maschere, distinguendo label configurate e label
+    effettivamente annotate. <code>save_summary()</code> produce sia JSON sia
+    CSV per rendere il controllo leggibile e riutilizzabile.
+  </p>
+
+  <h4><span class="file">src/cvat_to_boxes.py</span></h4>
+  <p>
+    <code>convert_cvat_xml()</code> supporta due strutture CVAT:
+    annotazioni video in <code>&lt;track&gt;</code> e annotazioni di immagini
+    in <code>&lt;image&gt;</code>. Per ogni <code>&lt;box&gt;</code>,
+    <code>box_row()</code> converte le coordinate in float e conserva
+    <code>outside</code> e <code>occluded</code>. Le righe vengono ordinate
+    per sorgente, frame e track.
+  </p>
+  <pre>python src/cvat_to_boxes.py \
+  --xml data/exports_cvat/TASK/annotations.xml \
+  --out results/annotations/video_boxes.csv</pre>
+
+  <h4><span class="file">src/visualize_boxes.py</span></h4>
+  <p>
+    Lo script carica soltanto box attive:
+    <code>outside ∉ {1, true, yes}</code>. Normalizza frame come
+    <code>1</code>, <code>1.0</code> o stringa, usa <code>frames.csv</code>
+    quando disponibile e, in fallback, interpreta
+    <code>frame_000001</code> come frame 0. Le coordinate vengono arrotondate e
+    limitate ai bordi dell’immagine prima di disegnare rettangolo e label con
+    OpenCV.
+  </p>
+
+  <h3 id="s10-3">10.3 Metriche e valutazione</h3>
+  <h4><span class="file">src/metrics.py</span></h4>
+  <p>
+    <code>box_area()</code> restituisce area zero per coordinate invertite.
+    <code>iou()</code> calcola intersezione e unione:
+  </p>
+  <div class="formula">IoU = area(B<sub>pred</sub> ∩ B<sub>gt</sub>) / area(B<sub>pred</sub> ∪ B<sub>gt</sub>)</div>
+  <p>
+    <code>match_boxes()</code> costruisce tutte le coppie
+    predizione–ground truth, le ordina per IoU decrescente e applica matching
+    greedy uno-a-uno sopra soglia. Ogni box può essere associata una sola
+    volta.
+  </p>
+  <div class="formula">Precision = TP / (TP + FP)</div>
+  <div class="formula">Recall = TP / (TP + FN)</div>
+  <div class="formula">F1 = 2 · Precision · Recall / (Precision + Recall)</div>
+  <p>
+    Le divisioni per zero restituiscono 0. <code>evaluate_frame()</code>
+    combina matching e metriche per un singolo frame.
+  </p>
+
+  <h4><span class="file">src/evaluate_predictions.py</span></h4>
+  <p>
+    <code>prepare_data()</code> valida le colonne, scarta box CVAT
+    <code>outside</code>, converte score e coordinate, elimina predizioni sotto
+    soglia e rifiuta box con <code>xbr ≤ xtl</code> o
+    <code>ybr ≤ ytl</code>. La valutazione predefinita è class-agnostic, coerente
+    con la label unica <code>anomalia</code>.
+  </p>
+  <p>
+    <code>evaluate_subset()</code> esegue il matching per frame e aggrega TP,
+    FP e FN. <code>evaluation_rows()</code> crea righe globali e raggruppate
+    per metodo, prompt e coppia metodo/prompt. Il CSV di predizione richiesto
+    contiene:
+  </p>
+  <pre>frame,label,score,xtl,ytl,xbr,ybr,prompt,method</pre>
+  <div class="callout warn">
+    Le metriche box misurano la localizzazione rispetto alla ground truth; non
+    bastano da sole a dimostrare anomaly detection se il metodo usa soltanto
+    classi note di oggetti.
+  </div>
+
+  <h3 id="s10-4">10.4 Configurazioni, prompt e stub SAM2</h3>
+  <h4><span class="file">configs/experiment_config.yaml</span></h4>
+  <p>
+    Centralizza label principale, attributi, directory e soglie IoU 0,30 e
+    0,50. Separare configurazione e codice rende gli esperimenti documentabili
+    senza modificare le funzioni.
+  </p>
+
+  <h4><span class="file">src/prompt_strategy.py</span> e <span class="file">configs/prompts_zero_shot.yaml</span></h4>
+  <p>
+    <code>load_prompts()</code> usa <code>yaml.safe_load</code>, richiede una
+    mappa e valida che ciascuna famiglia sia una lista di stringhe non vuote.
+    Le famiglie sono prompt diretti, prompt dello sfondo e prompt combinati.
+    Dopo la correzione metodologica, queste liste sono considerate strumenti
+    esplorativi o ausiliari, non la definizione dell’anomalia.
+  </p>
+
+  <h4><span class="file">src/sam2_notes_or_stub.py</span></h4>
+  <p>
+    Lo stub usa <code>importlib.util.find_spec</code> per verificare la
+    disponibilità di <code>torch</code> e <code>sam2</code> senza importarli.
+    Se mancano, mostra istruzioni chiare e termina con successo. In questo modo
+    la pipeline leggera funziona anche senza GPU e checkpoint.
+  </p>
+
+  <h3 id="s10-5">10.5 Spiegazione dettagliata di <span class="file">build_anomaly_dataset.py</span></h3>
+  <p>
+    È lo script centrale per E04. Produce uno split one-class riproducibile e
+    impedisce di usare accidentalmente annotazioni anomale nel training.
+  </p>
+  <table>
+    <thead><tr><th>Funzione</th><th>Algoritmo e controlli</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>VideoInfo</code></td>
+        <td>Dataclass immutabile con nome, path, FPS e numero di frame.</td>
+      </tr>
+      <tr>
+        <td><code>sample_frame_indices()</code></td>
+        <td>Calcola la durata, genera indici a frequenza costante con arrotondamento, rimuove duplicati e controlla che <code>0 &lt; sample_fps ≤ source_fps</code>.</td>
+      </tr>
+      <tr>
+        <td><code>classify_sampled_frames()</code></td>
+        <td>Per ogni frame esamina una finestra temporale. È “normal” se nessun indice della finestra è anomalo; “anomaly” se tutti gli indici sono anomali; altrimenti è “ambiguous” ed escluso.</td>
+      </tr>
+      <tr>
+        <td><code>split_normal_frames()</code></td>
+        <td>Divide cronologicamente i frame normali 80/20; garantisce almeno un elemento in entrambi gli insiemi.</td>
+      </tr>
+      <tr>
+        <td><code>read_inventory()</code></td>
+        <td>Accetta soltanto righe con <code>ok=True</code> e costruisce la mappa nome → metadati.</td>
+      </tr>
+      <tr>
+        <td><code>read_active_anomaly_frames()</code></td>
+        <td>Legge tutti i CSV <code>*_boxes.csv</code>, considera attive le righe non <code>outside</code>, crea l’insieme dei frame anomali e conserva le box per la sola valutazione.</td>
+      </tr>
+      <tr>
+        <td><code>save_selected_frames()</code></td>
+        <td>Decodifica ogni video una sola volta in ordine sequenziale, salva solo gli indici richiesti con qualità JPEG configurabile e segnala eventuali frame mancanti.</td>
+      </tr>
+      <tr>
+        <td><code>build_dataset()</code></td>
+        <td>Combina tutte le fasi, crea cartelle train/validation/test, manifest, riepilogo, box e metadati. Rifiuta una cartella di output già esistente per evitare sovrascritture non tracciate.</td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>python src/build_anomaly_dataset.py \
+  --inventory results/inventory/inventario_video.csv \
+  --annotations-dir results/annotations \
+  --out data/processed/anomaly_pilot_v3 \
+  --sample-fps 2 \
+  --margin-seconds 2 \
+  --train-fraction 0.8 \
+  --jpeg-quality 90</pre>
+  <p>I file generati sono:</p>
+  <ul>
+    <li><code>manifest.csv</code>: path, split, label, video, frame, timestamp e sorgente CVAT;</li>
+    <li><code>split_summary.csv</code>: conteggi per video e split;</li>
+    <li><code>ground_truth_boxes.csv</code>: 3.473 box attive dei frame di test;</li>
+    <li><code>metadata.json</code>: definizioni, parametri e conteggi;</li>
+    <li>immagini sotto <code>train/normal</code>, <code>validation/normal</code> e <code>test/anomaly</code>.</li>
+  </ul>
+</section>
+
+<section id="s11" class="page-break">
+  <h2>11. Spiegazione dei notebook Google Colab</h2>
+
+  <h3>11.1 <span class="file">sam2_pilot_colab.ipynb</span> — E01</h3>
+  <ol>
+    <li>Controllo GPU con <code>nvidia-smi</code>.</li>
+    <li>Installazione del repository SAM2 e caricamento del checkpoint Small.</li>
+    <li>Upload della clip, estrazione dei 500 frame in una directory temporanea.</li>
+    <li>Costruzione del video predictor e inizializzazione dello stato.</li>
+    <li>Inserimento della box manuale al frame 0 e selezione dell’oggetto.</li>
+    <li>Propagazione della maschera lungo il video.</li>
+    <li>Conversione maschera → box, salvataggio di CSV e NPZ.</li>
+    <li>Creazione del video overlay e di una tavola con sei frame.</li>
+    <li>Esportazione di metadati e ZIP.</li>
+  </ol>
+
+  <h3>11.2 <span class="file">grounded_sam2_pilot_colab.ipynb</span> — E02</h3>
+  <ol>
+    <li>Caricamento della stessa clip e del primo frame.</li>
+    <li>Caricamento di <code>AutoProcessor</code> e <code>AutoModelForZeroShotObjectDetection</code>.</li>
+    <li>Inferenza con prompt <code>person</code> e soglie 0,20/0,15.</li>
+    <li>Filtro delle box sotto 0,30.</li>
+    <li>Passaggio delle due box mantenute a SAM2 come due identità.</li>
+    <li>Propagazione su 500 frame, overlay con colori distinti e salvataggio.</li>
+  </ol>
+  <p>
+    Nel runtime verificato erano presenti Torch 2.11.0+cu128,
+    torchvision 0.26.0+cu128, transformers 4.57.0 e accelerate 1.14.0.
+    Il warning di dipendenza Gradio/Pydantic non ha impedito gli import usati
+    nell’esperimento.
+  </p>
+
+  <h3>11.3 Codice E03</h3>
+  <p>
+    La cella E03 esegue i sei prompt sullo stesso frame, registra tutte le box
+    sopra 0,20, marca come selezionate quelle sopra 0,30, misura il tempo e
+    genera figura, CSV dettagliato, riepilogo e metadati. Un reset del runtime
+    aveva eliminato <code>gdino_processor</code>; il modello e il processor
+    sono stati ricaricati, quindi la cella è stata rieseguita con successo.
+  </p>
+
+  <h3>11.4 <span class="file">e04_one_class_anomaly_colab.ipynb</span> — E04</h3>
+  <table>
+    <thead><tr><th>Cella</th><th>Funzione</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Upload e decompressione di <code>anomaly_pilot_v3_colab.zip</code>.</td></tr>
+      <tr><td>2</td><td>Import, verifica manifest/box e controllo GPU.</td></tr>
+      <tr><td>3</td><td>ResNet18 congelata fino a layer3; preprocessing 224×280.</td></tr>
+      <tr><td>4</td><td>Estrazione delle patch normali e memoria massima di 30.000 vettori.</td></tr>
+      <tr><td>5</td><td>Distanza nearest-neighbor con <code>torch.cdist</code>; heatmap e score al 99° percentile.</td></tr>
+      <tr><td>6</td><td>Soglia al 95° percentile normale; AUROC, AP, precision, recall, F1 e pointing game.</td></tr>
+      <tr><td>7</td><td>Tavola qualitativa con heatmap e box CVAT verdi.</td></tr>
+      <tr><td>8</td><td>Esportazione di score, mappe, memoria, runtime, figura e ZIP.</td></tr>
+    </tbody>
+  </table>
+  <p>
+    La memoria salvata in FP16 consente di ricostruire il riferimento normale.
+    <code>frame_scores.csv</code> conserva uno score per ogni frame,
+    <code>anomaly_maps.npz</code> le mappe locali e
+    <code>summary.json</code> le metriche. Il codice non usa Grounding DINO per
+    la decisione di anomalia.
+  </p>
+</section>
+
+<section id="s12">
+  <h2>12. Test, controlli e artefatti salvati</h2>
+  <h3>12.1 Test del codice</h3>
+  <ul>
+    <li><code>test_metrics.py</code>: IoU, matching e precision/recall/F1;</li>
+    <li><code>test_cvat.py</code>: parsing e conversione di export CVAT;</li>
+    <li><code>test_anomaly_dataset.py</code>: campionamento, margini e split cronologico.</li>
+  </ul>
+  <p>
+    Il nuovo script E04 è stato compilato con <code>py_compile</code> e le
+    asserzioni essenziali sono state eseguite con successo. Nell’ambiente
+    locale corrente <code>pytest</code> non è installato, quindi l’intera suite
+    dovrà essere rilanciata dopo aver aggiunto la dipendenza di sviluppo.
+  </p>
+
+  <h3>12.2 Controlli sui dati E04</h3>
+  <ul class="checklist">
+    <li>1.106 righe del manifest e 1.106 immagini presenti;</li>
+    <li>169 train normal, 42 validation normal, 895 test anomaly;</li>
+    <li>3.473 box CVAT di test;</li>
+    <li>metadati JSON coerenti con i file;</li>
+    <li>ZIP verificato senza errori con <code>unzip -t</code>.</li>
+  </ul>
+
+  <h3>12.3 Artefatti principali</h3>
+  <table>
+    <thead><tr><th>Area</th><th>File/cartella</th><th>Contenuto</th></tr></thead>
+    <tbody>
+      <tr><td>Inventario</td><td class="file">results/inventory/</td><td>Metadati tecnici dei tre video</td></tr>
+      <tr><td>Ground truth</td><td class="file">results/annotations/</td><td>Due CSV CVAT convertiti</td></tr>
+      <tr><td>E01</td><td class="file">results/qualitative/sam2_pilot_01/</td><td>Video, maschere, box, figure, JSON e ZIP</td></tr>
+      <tr><td>E01 metriche</td><td class="file">results/metrics/sam2_pilot_01/</td><td>IoU per frame e riepilogo</td></tr>
+      <tr><td>E02</td><td class="file">results/qualitative/grounded_sam2_pilot_02/</td><td>Detection, tracking, video, maschere e metadati</td></tr>
+      <tr><td>E02 metriche</td><td class="file">results/metrics/grounded_sam2_pilot_02/</td><td>Matching candidati-track CVAT</td></tr>
+      <tr><td>E03</td><td class="file">results/qualitative/grounding_dino_prompt_sensitivity_e03/</td><td>Figura, detection, summary, metadati e analisi</td></tr>
+      <tr><td>E04 dati</td><td class="file">data/processed/anomaly_pilot_v3/</td><td>Split one-class e box di valutazione</td></tr>
+      <tr><td>E04 Colab</td><td class="file">notebooks/e04_one_class_anomaly_colab.ipynb</td><td>Notebook completo non ancora eseguito</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s13">
+  <h2>13. Limiti attuali e rischi metodologici</h2>
+  <ol>
+    <li>
+      <strong>Ground truth da revisionare.</strong> Track interpolate male
+      alterano IoU, F1 e qualsiasi valutazione di localizzazione.
+    </li>
+    <li>
+      <strong>Terzo video non annotato.</strong> Non è ancora disponibile un
+      test aggiuntivo indipendente.
+    </li>
+    <li>
+      <strong>Definizione automatica di normalità.</strong> E04 interpreta
+      “nessuna box CVAT attiva” come normale; questi frame vanno controllati
+      visivamente per escludere omissioni.
+    </li>
+    <li>
+      <strong>Training e test nelle stesse scene.</strong> Il pilot misura
+      anomalie contestuali rispetto alle telecamere note; non prova
+      generalizzazione a una nuova stazione.
+    </li>
+    <li>
+      <strong>Feature RGB su termico.</strong> ResNet18 è pre-addestrata su
+      immagini RGB e può subire domain shift sulle immagini termiche.
+    </li>
+    <li>
+      <strong>Tempo.</strong> E03 misura il primo prompt con warm-up; i tempi
+      non costituiscono ancora un benchmark prestazionale.
+    </li>
+    <li>
+      <strong>E01–E03 non sono anomaly detection completa.</strong> Devono
+      essere presentati come studi preliminari dei moduli di localizzazione.
+    </li>
+  </ol>
+</section>
+
+<section id="s14">
+  <h2>14. Prossimi passi ordinati</h2>
+  <ol>
+    <li><strong>Eseguire E04</strong> in Colab e scaricare lo ZIP completo dei risultati.</li>
+    <li><strong>Controllare le heatmap</strong>: verificare se evidenziano persone/oggetti o cambiamenti irrilevanti dello sfondo.</li>
+    <li><strong>Archiviare E04</strong> nel registro con AUROC, AP, F1 e pointing game reali.</li>
+    <li><strong>Correggere CVAT</strong> nell’intervallo 98–101 s e negli altri errori visibili.</li>
+    <li><strong>Ricalcolare E01/E02</strong> con ground truth corretta.</li>
+    <li><strong>Annotare il terzo video</strong> e usarlo come test aggiuntivo o hold-out.</li>
+    <li><strong>Confrontare una seconda baseline</strong> solo se il tempo lo permette, mantenendo identico lo split.</li>
+    <li><strong>Integrare SAM2 dopo la heatmap</strong>, se utile, per rifinire e propagare la regione anomala.</li>
+    <li><strong>Scrivere i capitoli</strong> usando registro, figure, tabelle e limiti già salvati.</li>
+  </ol>
+  <div class="callout">
+    Il prossimo passo operativo immediato è aprire
+    <code>e04_one_class_anomaly_colab.ipynb</code>, attivare la GPU e caricare
+    <code>anomaly_pilot_v3_colab.zip</code>.
+  </div>
+</section>
+
+<section id="s15">
+  <h2>15. Materiale utilizzabile nella tesi e nelle slide</h2>
+  <table>
+    <thead><tr><th>Messaggio</th><th>Materiale consigliato</th></tr></thead>
+    <tbody>
+      <tr><td>Problema e dominio termico</td><td>Un frame rappresentativo autorizzato e la definizione di anomalia contestuale</td></tr>
+      <tr><td>Ground truth</td><td>Protocollo CVAT, box e spiegazione di keyframe/interpolazione</td></tr>
+      <tr><td>Ruolo di SAM2</td><td>Figura 2 e distinzione prompt → segmentazione/tracking</td></tr>
+      <tr><td>Pipeline automatica ausiliaria</td><td>Figure 3 e 4: testo → box → SAM2</td></tr>
+      <tr><td>Sensibilità ai prompt</td><td>Figura 5, dichiarando che non è anomaly detection finale</td></tr>
+      <tr><td>Importanza della ground truth</td><td>Figura 1 e metriche provvisorie</td></tr>
+      <tr><td>Vera anomaly detection</td><td>Schema E04: normalità → distanza → score/heatmap</td></tr>
+      <tr><td>Risultati finali E04</td><td>Da aggiungere dopo l’esecuzione, senza anticipare numeri</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Il materiale è già organizzato in
+    <code>docs/scaletta_presentazione.md</code> per una presentazione di circa
+    8–10 minuti. Le figure E01–E03 possono essere usate nelle slide purché
+    l’autorizzazione sui dati lo consenta.
+  </p>
+</section>
+
+<section id="s16">
+  <h2>16. Riferimenti essenziali</h2>
+  <ol>
+    <li>
+      K. Roth et al., “Towards Total Recall in Industrial Anomaly Detection”,
+      CVPR 2022. Metodo PatchCore, riferimento concettuale per la memoria di
+      feature locali normali.
+      <br><span class="small">https://openaccess.thecvf.com/content/CVPR2022/html/Roth_Towards_Total_Recall_in_Industrial_Anomaly_Detection_CVPR_2022_paper.html</span>
+    </li>
+    <li>
+      N. Ravi et al., “SAM 2: Segment Anything in Images and Videos”, 2024.
+      Repository ufficiale Meta.
+      <br><span class="small">https://github.com/facebookresearch/sam2</span>
+    </li>
+    <li>
+      S. Liu et al., “Grounding DINO: Marrying DINO with Grounded Pre-Training
+      for Open-Set Object Detection”, 2023.
+      <br><span class="small">https://github.com/IDEA-Research/GroundingDINO</span>
+    </li>
+    <li>
+      C. Li et al., “Segmenting Objects in Day and Night:
+      Edge-Conditioned CNN for Thermal Image Semantic Segmentation”,
+      IEEE TNNLS, DOI 10.1109/TNNLS.2020.3009373.
+    </li>
+    <li>
+      Thermal Anomaly Detection Dataset, Kaggle. Benchmark esterno termico da
+      trattare dichiarando il domain gap rispetto al contesto ferroviario.
+      <br><span class="small">https://www.kaggle.com/datasets/neelu1/thermal-anomaly-detection-dataset</span>
+    </li>
+  </ol>
+  <div class="footer-note">
+    Fine della relazione tecnica — versione 1.0, 3 luglio 2026.
+    Il documento deve essere aggiornato dopo l’esecuzione di E04 e la revisione
+    della ground truth CVAT.
+  </div>
+</section>
+
+</body>
+</html>

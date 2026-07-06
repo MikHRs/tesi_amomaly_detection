@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Cosa è stato davvero riconosciuto finora</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: #172033;
+  background: #e9edf3;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.35;
+}
+.page {
+  width: 210mm;
+  height: 297mm;
+  padding: 16mm 17mm 14mm;
+  margin: 8mm auto;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+.page:last-child { page-break-after: auto; }
+h1 { font-size: 28pt; line-height: 1.08; margin: 0 0 8mm; }
+h2 { font-size: 20pt; margin: 0 0 6mm; color: #173f75; }
+h3 { font-size: 13pt; margin: 4mm 0 2mm; }
+p, li, td, th { font-size: 10.5pt; }
+p { margin: 0 0 3mm; }
+ul { margin: 2mm 0 4mm 5mm; padding-left: 4mm; }
+li { margin-bottom: 1.6mm; }
+.kicker {
+  color: #2367a8;
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 5mm;
+}
+.subtitle { font-size: 15pt; color: #526175; max-width: 160mm; }
+.name { margin-top: 18mm; font-size: 12pt; color: #526175; }
+.hero {
+  border-radius: 5mm;
+  padding: 8mm;
+  margin: 8mm 0 6mm;
+  background: #f3f6fa;
+  border: 1px solid #d7dee8;
+}
+.yes { border-left: 5mm solid #25a55b; }
+.no { border-left: 5mm solid #d84b4b; }
+.warn { border-left: 5mm solid #f0a230; }
+.hero strong { display: block; font-size: 17pt; margin-bottom: 2mm; }
+.big-answer { font-size: 14pt; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.card {
+  background: #f7f9fc;
+  border: 1px solid #dce3ec;
+  border-radius: 3mm;
+  padding: 5mm;
+}
+.number { font-size: 26pt; font-weight: 800; color: #2367a8; }
+.label { font-size: 9.5pt; color: #526175; }
+table { width: 100%; border-collapse: collapse; margin: 3mm 0; }
+th {
+  background: #173f75;
+  color: white;
+  text-align: left;
+  padding: 2.6mm;
+}
+td { border-bottom: 1px solid #dce3ec; padding: 2.4mm; vertical-align: top; }
+tr:nth-child(even) td { background: #f7f9fc; }
+.tag {
+  display: inline-block;
+  border-radius: 99px;
+  padding: .8mm 2.4mm;
+  font-size: 8.5pt;
+  font-weight: 700;
+}
+.green { background: #dcf4e5; color: #16703c; }
+.red { background: #fde2e2; color: #a42d2d; }
+.amber { background: #ffefce; color: #8a5b00; }
+.blue { background: #dceeff; color: #145f9d; }
+.figure {
+  width: 100%;
+  max-height: 150mm;
+  object-fit: contain;
+  display: block;
+  margin: 3mm auto;
+}
+.figure.short { max-height: 112mm; }
+.caption { font-size: 8.5pt; color: #59697d; text-align: center; }
+.plain {
+  font-size: 14pt;
+  background: #fff4dd;
+  border: 1px solid #f1cb78;
+  border-radius: 3mm;
+  padding: 5mm;
+  margin: 5mm 0;
+}
+.quote {
+  font-size: 14pt;
+  line-height: 1.45;
+  border-left: 4px solid #2367a8;
+  padding: 4mm 0 4mm 6mm;
+  margin: 6mm 0;
+  color: #243a55;
+}
+.footer {
+  position: absolute;
+  bottom: 7mm;
+  left: 17mm;
+  right: 17mm;
+  display: flex;
+  justify-content: space-between;
+  color: #78869a;
+  font-size: 8pt;
+}
+.small, .small li, .small td { font-size: 9pt; }
+@media print {
+  body { background: white; }
+  .page { margin: 0; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="kicker">Relazione breve e corretta · 6 luglio 2026</div>
+  <h1>Cosa è stato davvero<br>riconosciuto finora</h1>
+  <p class="subtitle">Localizzazione di anomalie in immagini termiche ferroviarie — sintesi leggibile per il ricevimento del 7 luglio 2026</p>
+
+  <div class="hero yes">
+    <strong>Sì: le persone sono state riconosciute e localizzate.</strong>
+    Grounding DINO trova le persone; SAM2 le segmenta e le segue; AnomalyDINO concentra spesso il proprio massimo sulle persone.
+  </div>
+
+  <div class="hero no">
+    <strong>No: gli oggetti “incerto” sui binari non sono ancora stati dimostrati.</strong>
+    Le metriche principali E01–E09 hanno valutato soprattutto le persone. L'audit appena eseguito trova zero localizzazioni degli oggetti <em>incerto</em> con le proposte E05.
+  </div>
+
+  <div class="hero warn">
+    <strong>E10 ha verificato esplicitamente il problema</strong>
+    Aumentare i candidati da 1 a 3 o 5 migliora la copertura delle persone, ma produce ancora zero localizzazioni delle 1.000 box <em>incerto_sui_binari</em>.
+  </div>
+
+  <p class="name"><strong>Michele Rais</strong><br>Tesi triennale in Ingegneria Informatica</p>
+  <div class="footer"><span>Sintesi scientifica corretta</span><span>1 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">01 · Ground truth</div>
+  <h2>Che cosa è stato annotato in CVAT?</h2>
+
+  <div class="grid2">
+    <div class="card"><div class="number">20</div><div class="label">track nell'intero export v2: 14 persona e 6 incerto</div></div>
+    <div class="card"><div class="number">12</div><div class="label">track visibili nella clip sperimentale: 8 persona e 4 incerto</div></div>
+    <div class="card"><div class="number">3.732</div><div class="label">box persona nei 500 frame</div></div>
+    <div class="card"><div class="number">1.473</div><div class="label">box incerto nei 500 frame</div></div>
+  </div>
+
+  <img class="figure short" src="assets/scope_audit_frame_250.png" alt="Box CVAT distinte per tipo">
+  <p class="caption">Verde: persona. Azzurro: incerto sui binari. Rosso: altro incerto. Nella clip, le track incerto 9 e 18 sono sui binari per tutti i 500 frame, per un totale di 1.000 box.</p>
+
+  <div class="plain">
+    Nel file CVAT la classe principale è sempre <strong>anomalia</strong>, ma l'attributo <strong>tipo</strong> contiene soltanto <strong>persona</strong> e <strong>incerto</strong>. “Box” e “pallet” erano prompt esplorativi di Grounding DINO, non classi validate della ground truth.
+  </div>
+  <div class="footer"><span>Dati CVAT v2 revisionati</span><span>2 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">02 · Audit degli esperimenti</div>
+  <h2>Che cosa ha valutato davvero ogni prova?</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Che cosa ha fatto</th><th>Oggetto valutato</th><th>Stato</th></tr></thead>
+    <tbody>
+      <tr><td>E01</td><td>SAM2 da box manuale e tracking</td><td>Una persona</td><td><span class="tag green">quantitativo</span></td></tr>
+      <tr><td>E02</td><td>Grounding DINO periodico + SAM2</td><td>Tre persone</td><td><span class="tag green">quantitativo</span></td></tr>
+      <tr><td>E03</td><td>Prompt person, box, pallet, obstacle, anomaly</td><td>Proposte su un frame</td><td><span class="tag amber">solo qualitativo</span></td></tr>
+      <tr><td>E05</td><td>AnomalyDINO 16-shot</td><td>Decisione di frame; localizzazione persona</td><td><span class="tag green">quantitativo</span></td></tr>
+      <tr><td>E06</td><td>AnomalyVFM zero-shot</td><td>Decisione di frame; pointing persona</td><td><span class="tag green">quantitativo</span></td></tr>
+      <tr><td>E07</td><td>AnomalyVFM su dataset portuale</td><td>Anomalia temporale, non box</td><td><span class="tag blue">controllo esterno</span></td></tr>
+      <tr><td>E08</td><td>AnomalyDINO su dataset portuale</td><td>Anomalia temporale, non box</td><td><span class="tag blue">controllo esterno</span></td></tr>
+      <tr><td>E09</td><td>Massimo AnomalyDINO → SAM2</td><td>Migliore box persona</td><td><span class="tag green">quantitativo</span></td></tr>
+      <tr><td>E10</td><td>Cinque candidati → SAM2</td><td>Persona e incerto separati</td><td><span class="tag green">quantitativo</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="plain">
+    <strong>Conclusione dell'audit:</strong> la campagna ha provato bene la componente “persona”, la classificazione di frame e il raffinamento con SAM2. E10 mostra invece che il protocollo attuale non recupera gli oggetti incerti sui binari.
+  </div>
+  <div class="footer"><span>Ambito reale delle prove</span><span>3 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">03 · Risultati difendibili</div>
+  <h2>Che cosa possiamo affermare con sicurezza?</h2>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>SAM2 funziona con un candidato corretto</h3>
+      <p>E01: una persona seguita per 490 frame comuni, IoU media 0,755.</p>
+    </div>
+    <div class="card">
+      <h3>Il detector periodico trova nuovi ingressi</h3>
+      <p>E02: tre persone; IoU media aggregata 0,707 e F1@0,5 pari a 0,946.</p>
+    </div>
+    <div class="card">
+      <h3>AnomalyDINO punta spesso alle persone</h3>
+      <p>E05: il massimo cade dentro una persona in 478 frame su 500.</p>
+    </div>
+    <div class="card">
+      <h3>SAM2 rifinisce la geometria</h3>
+      <p>E09: IoU media 0,501 → 0,717; hit@0,5 0,534 → 0,934.</p>
+    </div>
+  </div>
+
+  <img class="figure short" src="../results/sam_refinement/E09_v1_anomalydino_point_sam2/export/E09_quantitative_comparison.png" alt="Confronto quantitativo E09">
+
+  <div class="plain">
+    Questi risultati dimostrano una buona pipeline per <strong>candidati-persona</strong>. Non devono essere presentati come prova generale di riconoscimento di ogni ostacolo ferroviario.
+  </div>
+  <div class="footer"><span>Risultati principali</span><span>4 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">04 · Lacuna emersa</div>
+  <h2>Gli oggetti incerti sui binari sono stati localizzati?</h2>
+  <img class="figure short" src="assets/scope_audit_metrics.png" alt="Audit delle metriche persona e incerto">
+
+  <div class="hero no">
+    <strong>Risposta: no, con il protocollo testato.</strong>
+    Il massimo AnomalyDINO colpisce una persona in 478/500 frame, ma una box <em>incerto</em> in 0/500. E10 arriva a 2.038 predizioni con K=5, ma mantiene 0 true positive sulle 1.000 box <em>incerto_sui_binari</em>.
+  </div>
+
+  <p>Questo non significa necessariamente che il modello “non veda” alcuna regione dell'oggetto: significa che, con la conversione in punto/box e le soglie usate, non esiste ancora una corrispondenza quantitativa sufficiente con quelle box.</p>
+  <p>E03 ha prodotto candidati per i prompt <em>box</em> e <em>pallet</em>, ma il test era su un solo frame e non possedeva una ground truth semantica separata. È quindi un'osservazione qualitativa, non un risultato di riconoscimento.</p>
+  <div class="footer"><span>Audit aggiunto il 6 luglio</span><span>5 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">05 · Risultato E10</div>
+  <h2>Più candidati aiutano le persone, non gli oggetti</h2>
+
+  <div class="quote">
+    E10 ha confrontato 1, 3 e 5 massimi AnomalyDINO spazialmente separati, trasformati in box SAM2 e valutati separatamente sulle persone e sugli oggetti incerti.
+  </div>
+
+  <table>
+    <thead><tr><th>Persona @ IoU 0,3</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead>
+    <tbody>
+      <tr><td>K=1</td><td>0,976</td><td>0,131</td><td>0,231</td></tr>
+      <tr><td>K=3</td><td>0,844</td><td>0,298</td><td><strong>0,440</strong></td></tr>
+      <tr><td>K=5</td><td>0,583</td><td>0,318</td><td>0,412</td></tr>
+    </tbody>
+  </table>
+
+  <img class="figure short" src="../results/sam_refinement/E10_v1_anomalydino_multipoint_sam2/export/E10_quantitative_tradeoff.png" alt="Metriche E10 per scope">
+
+  <div class="hero no">
+    <strong>Incerto sui binari: 0 true positive</strong>
+    K=1, K=3 e K=5 ottengono precision, recall e F1 pari a zero sia a IoU 0,3 sia a 0,5. K=3 è invece il miglior compromesso per le persone.
+  </div>
+  <div class="footer"><span>E10 completato il 6 luglio</span><span>6 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">06 · Come dirlo al professore</div>
+  <h2>Spiegazione in due minuti</h2>
+
+  <div class="quote">
+    «Ho riesaminato lo scope delle metriche. I risultati migliori riguardano soprattutto le persone. Ho quindi eseguito E10 con fino a cinque candidati e metriche separate. Il recall delle persone sale dal 13,1% al 31,8%, ma nessuna configurazione recupera gli oggetti incerti sui binari. Il limite è quindi confermato e richiede una scelta metodologica diversa.»
+  </div>
+
+  <h3>Tre domande da porre</h3>
+  <ol>
+    <li>Le track `incerto` 9 e 18 devono essere rinominate con una categoria più precisa dopo una nuova verifica in CVAT?</li>
+    <li>La tesi deve concentrarsi sulla localizzazione di persone in area ferroviaria oppure mantenere l'obiettivo più ampio di ostacolo/anomalia generica?</li>
+    <li>Dato che E10 non recupera gli oggetti, conviene introdurre un detector dedicato oppure trattare questo limite come risultato conclusivo?</li>
+  </ol>
+
+  <div class="plain">
+    Dire esplicitamente il limite aumenta la credibilità del lavoro. Il punto non è mostrare che “funziona tutto”, ma dimostrare con metriche quali componenti funzionano, su quali anomalie e dove falliscono.
+  </div>
+  <div class="footer"><span>Copione per il ricevimento</span><span>7 / 8</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker">07 · Numeri e tracciabilità</div>
+  <h2>Riepilogo essenziale</h2>
+  <table>
+    <thead><tr><th>Dato</th><th>Valore</th><th>Interpretazione</th></tr></thead>
+    <tbody>
+      <tr><td>Clip principale</td><td>500 frame, 640×512</td><td>San Donato, 85–105 s</td></tr>
+      <tr><td>GT persona</td><td>3.732 box, 8 track visibili</td><td>Scope quantitativo principale E01–E09</td></tr>
+      <tr><td>GT incerto</td><td>1.473 box, 4 track visibili</td><td>Non valutato correttamente prima dell'audit</td></tr>
+      <tr><td>Incerto sui binari</td><td>1.000 box, track 9 e 18</td><td>Scope prioritario E10</td></tr>
+      <tr><td>Massimo E05</td><td>478 persona; 0 incerto; 22 nessuna</td><td>Dominanza delle persone</td></tr>
+      <tr><td>Proposte E05 @0,3</td><td>902 TP persona; 0 TP incerto</td><td>La lacuna non riguarda solo il massimo</td></tr>
+      <tr><td>E09</td><td>IoU media persona 0,717</td><td>SAM2 rifinisce bene un candidato valido</td></tr>
+      <tr><td>E10 persona</td><td>F1@0,3: 0,231 → 0,440 con K=3</td><td>Più candidati aumentano la copertura</td></tr>
+      <tr><td>E10 incerto sui binari</td><td>0 TP per K=1,3,5</td><td>Serve un metodo diverso o una ridefinizione dello scope</td></tr>
+    </tbody>
+  </table>
+
+  <h3>File verificabili</h3>
+  <ul class="small">
+    <li>Ground truth: <code>results/annotations/test_video_san_donato_v2_reviewed_boxes.csv</code></li>
+    <li>Risultati E05: <code>results/anomaly_dino/E05_v1_anomalydino_16shot/</code></li>
+    <li>Risultati E09: <code>results/sam_refinement/E09_v1_anomalydino_point_sam2/</code></li>
+    <li>Risultati E10: <code>results/sam_refinement/E10_v1_anomalydino_multipoint_sam2/</code></li>
+    <li>Protocollo corretto: <code>docs/protocollo_e10_anomalydino_multipoint_sam2.md</code></li>
+    <li>Notebook: <code>notebooks/E10_AnomalyDINO_MultiPoint_SAM2_v1.ipynb</code></li>
+  </ul>
+
+  <div class="hero yes">
+    <strong>Messaggio finale</strong>
+    Il lavoro dimostra una buona localizzazione delle persone e quantifica un limite altrettanto importante: con AnomalyDINO → SAM2, aumentare i candidati non recupera gli oggetti incerti sui binari.
+  </div>
+  <div class="footer"><span>Michele Rais · Tesi</span><span>8 / 8</span></div>
+</section>
+
+</body>
+</html>
